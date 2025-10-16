@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import zelda from '../assets/images/zelda.jpg';
-import cyberpunk from '../assets/images/cyberpunk.avif';
-import eldenring from '../assets/images/EldenRing.avif';
-import minecraft from '../assets/images/Minecraft.avif';
+import cyberpunk from '../assets/images/Cyberpunk-2077.jpg';
+import eldenring from '../assets/images/EldenRin.jpg';
+import minecraft from '../assets/images/maicra.jpg';
 import gow from '../assets/images/god-war-ragnarok-2872129.webp';
 import fornai from '../assets/images/fornai.jpg';
 
