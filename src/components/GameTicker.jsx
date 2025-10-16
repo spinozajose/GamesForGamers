@@ -7,6 +7,8 @@ import minecraft from '../assets/images/maicra.jpg';
 import gow from '../assets/images/god-war-ragnarok-2872129.webp';
 import fornai from '../assets/images/fornai.jpg';
 import '../assets/css/ofertas.css';
+import { useInView } from 'react-intersection-observer';
+import '../assets/css/ComponenteAnimado.css';
 
 const GameTicker = () => {
   const games = [
@@ -61,9 +63,14 @@ const GameTicker = () => {
   ];
 
   const duplicatedGames = [...games, ...games];
+  const { ref, inView } = useInView({
+      threshold: 0, 
+      triggerOnce: true, 
+    });
 
   return (
-    <div className="ticker-container">
+
+    <div ref={ref} className={`ticker-container componente ${inView ? 'visible' : 'oculto'}`}>
       <div className="ticker-header">
         <h2>🎮 Ofertas Especiales en Juegos</h2>
       </div>
