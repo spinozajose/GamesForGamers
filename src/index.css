@@ -1,0 +1,312 @@
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--accent, #007bff); /* puedes cambiar el color */
+  transform-origin: 0%;
+  z-index: 9999;
+}
+
+/* Estilos para el Game Ticker con efecto NEON RGB */
+.ticker-container {
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  padding: 25px 0;
+  margin: 25px 0;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Efecto de partículas RGB */
+.ticker-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 0, 0.1) 0%, transparent 50%);
+  animation: rgbBackground 8s ease-in-out infinite;
+}
+
+@keyframes rgbBackground {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.ticker-header {
+  text-align: center;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.ticker-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-shadow: 
+    0 0 10px #ff0080,
+    0 0 20px #ff0080,
+    0 0 30px #ff0080;
+  animation: rgbText 3s ease-in-out infinite;
+}
+
+@keyframes rgbText {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px #ff0080,
+      0 0 20px #ff0080,
+      0 0 30px #ff0080;
+  }
+  33% { 
+    text-shadow: 
+      0 0 10px #00ffff,
+      0 0 20px #00ffff,
+      0 0 30px #00ffff;
+  }
+  66% { 
+    text-shadow: 
+      0 0 10px #ffff00,
+      0 0 20px #ffff00,
+      0 0 30px #ffff00;
+  }
+}
+
+.ticker-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 180px;
+  z-index: 1;
+}
+
+.ticker-track {
+  display: flex;
+  position: absolute;
+  white-space: nowrap;
+  gap: 25px;
+  align-items: center;
+}
+
+.game-item {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 15px 25px;
+  border: 2px solid transparent;
+  min-width: max-content;
+  gap: 20px;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 128, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de borde RGB animado */
+.game-item::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    #ff0080, #00ffff, #ffff00, #ff0080);
+  background-size: 400% 400%;
+  border-radius: 22px;
+  z-index: -1;
+  animation: rgbBorder 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-item:hover::before {
+  opacity: 1;
+}
+
+@keyframes rgbBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.game-item:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 
+    0 0 30px rgba(255, 0, 128, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Imágenes con efecto neon */
+.game-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 0 15px rgba(255, 0, 128, 0.4),
+    0 0 30px rgba(0, 255, 255, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.game-item:hover .game-image {
+  transform: scale(1.08);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 128, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(255, 255, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.game-name {
+  color: white;
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.game-item:hover .game-name {
+  text-shadow: 
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
+}
+
+.game-price-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-price {
+  color: #ffff00;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.game-item:hover .game-price {
+  text-shadow: 
+    0 0 10px #ffff00,
+    0 0 20px #ffff00;
+}
+
+.game-original-price {
+  color: #ff0080;
+  text-decoration: line-through;
+  font-size: 1rem;
+  text-shadow: 0 0 8px rgba(255, 0, 128, 0.5);
+}
+
+.game-discount {
+  background: linear-gradient(45deg, #ff0080, #00ffff);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 128, 0.6),
+    0 0 25px rgba(0, 255, 255, 0.4);
+  animation: discountPulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-discount::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: discountShine 3s ease-in-out infinite;
+}
+
+@keyframes discountPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 15px rgba(255, 0, 128, 0.6),
+      0 0 25px rgba(0, 255, 255, 0.4);
+  }
+  50% { 
+    box-shadow: 
+      0 0 20px rgba(255, 0, 128, 0.8),
+      0 0 35px rgba(0, 255, 255, 0.6);
+  }
+}
+
+@keyframes discountShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Efecto de desvanecimiento con neon */
+.ticker-wrapper::before,
+.ticker-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticker-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, 
+    #0f0c29 0%, 
+    transparent 100%);
+}
+
+.ticker-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, 
+    #0f0c29 0%, 
+    transparent 100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticker-wrapper {
+    height: 150px;
+  }
+  
+  .game-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .ticker-wrapper::before,
+  .ticker-wrapper::after {
+    width: 80px;
+  }
+  
+  .ticker-header h2 {
+    font-size: 1.8rem;
+  }
+}
