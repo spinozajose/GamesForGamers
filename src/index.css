@@ -9,3 +9,67 @@
   z-index: 9999;
 }
 
+/* Variables CSS globales para temas RGB */
+:root {
+  --rgb-primary: 255, 0, 128;    /* Rosa */
+  --rgb-secondary: 0, 255, 255;  /* Cian */
+  --rgb-accent: 255, 255, 0;     /* Amarillo */
+  --gradient-neon: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+/* Aplicar el fondo RGB a toda la página */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--gradient-neon);
+  position: relative;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Variables CSS globales para temas RGB */
+:root {
+  --rgb-primary: 255, 0, 128;    /* Rosa */
+  --rgb-secondary: 0, 255, 255;  /* Cian */
+  --rgb-accent: 255, 255, 0;     /* Amarillo */
+  --gradient-neon: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+/* Aplicar el fondo RGB a toda la página */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--gradient-neon);
+  position: relative;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(var(--rgb-primary), 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(var(--rgb-secondary), 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(var(--rgb-accent), 0.1) 0%, transparent 50%);
+  animation: rgbBackground 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes rgbBackground {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}

@@ -6,6 +6,7 @@ import eldenring from '../assets/images/EldenRin.jpg';
 import minecraft from '../assets/images/maicra.jpg';
 import gow from '../assets/images/god-war-ragnarok-2872129.webp';
 import fornai from '../assets/images/fornai.jpg';
+import '../assets/css/ofertas.css';
 
 const GameTicker = () => {
   const games = [

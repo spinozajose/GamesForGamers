@@ -1,4 +1,3 @@
-import "./assets/css/ofertas.css";
 import "./index.css"; 
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
@@ -7,7 +6,6 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ScrollProgress from "./components/ScrollProgress";
-import GameTicker from "./components/GameTIcker";
 
 
 function App() {
@@ -15,7 +13,6 @@ function App() {
     <div className="d-flex flex-column min-vh-100">
       <ScrollProgress />
       <Header />
-      <GameTicker/>
       <main className="flex-grow-1 container my-4">
         <Routes>
           <Route path="/" element={<Home />} />
