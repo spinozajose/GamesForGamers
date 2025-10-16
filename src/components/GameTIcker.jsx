@@ -1,5 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import zelda from '../assets/images/zelda.jpg';
+import cyberpunk from '../assets/images/cyberpunk.avif';
+import eldenring from '../assets/images/EldenRing.avif';
+import minecraft from '../assets/images/Minecraft.avif';
+import gow from '../assets/images/god-war-ragnarok-2872129.webp';
+import fornai from '../assets/images/fornai.jpg';
 
 const GameTicker = () => {
   const games = [
@@ -9,7 +15,7 @@ const GameTicker = () => {
       price: '$53.99', 
       originalPrice: '$59.99',
       discount: '10%',
-      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&h=300&fit=crop&crop=center' // Imagen más grande
+      image: zelda // Imagen más grande
     },
     { 
       id: 2, 
@@ -17,7 +23,7 @@ const GameTicker = () => {
       price: '$27.99', 
       originalPrice: '$39.99',
       discount: '30%',
-      image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300&h=300&fit=crop&crop=center'
+      image: cyberpunk
     },
     { 
       id: 3, 
@@ -25,7 +31,7 @@ const GameTicker = () => {
       price: '$37.49', 
       originalPrice: '$49.99',
       discount: '25%',
-      image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=300&fit=crop&crop=center'
+      image: eldenring
     },
     { 
       id: 4, 
@@ -33,7 +39,7 @@ const GameTicker = () => {
       price: '$22.90', 
       originalPrice: '$26.95',
       discount: '15%',
-      image: 'https://images.unsplash.com/photo-1627856013091-fd9c2d2c8eff?w=300&h=300&fit=crop&crop=center'
+      image: minecraft
     },
     { 
       id: 5, 
@@ -41,7 +47,7 @@ const GameTicker = () => {
       price: '$39.99', 
       originalPrice: '$49.99',
       discount: '20%',
-      image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=300&fit=crop&crop=center'
+      image: gow
     },
     { 
       id: 6, 
@@ -49,7 +55,7 @@ const GameTicker = () => {
       price: 'Gratis', 
       originalPrice: '',
       discount: '',
-      image: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=300&h=300&fit=crop&crop=center'
+      image: fornai
     }
   ];
 
