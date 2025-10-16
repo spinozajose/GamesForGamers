@@ -22,7 +22,7 @@ function Home() {
     {
       id: 1,
       title: "Grand Thef Auto VI",
-      image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300&h=400&fit=crop",
+      image: "https://imagenes.elpais.com/resizer/v2/XOC4Q6EPWECJADRXQLJIXU5PNE.jpg?auth=ee24d91053a568132991fa4bd996180e6a2d47a05155287955e67f00ae49d046&width=1000",
       price: "$27.99",
       originalPrice: "$39.99",
       discount: "30%",
@@ -31,7 +31,7 @@ function Home() {
     {
       id: 2,
       title: "Subnautica 2",
-      image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
+      image: "https://i.3djuegos.com/juegos/20054/subnautica_2/fotos/ficha/subnautica_2-5929425.webp",
       price: "$37.49",
       originalPrice: "$49.99",
       discount: "25%",
@@ -40,7 +40,7 @@ function Home() {
     {
       id: 3,
       title: "Resident Evil Requiem",
-      image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
+      image: "https://image.api.playstation.com/vulcan/ap/rnd/202506/0700/3f30b1b8ee413768bb08940e8f848cf88b430aa6622a8873.png",
       price: "$37.49",
       originalPrice: "$49.99",
       discount: "25%",
@@ -87,7 +87,7 @@ function Home() {
                         <span className="original-price">{game.originalPrice}</span>
                       </div>
                       <button className="btn buy-now-btn">
-                        Comprar Ahora
+                        Reservar Ahora
                       </button>
                     </div>
                   </div>
