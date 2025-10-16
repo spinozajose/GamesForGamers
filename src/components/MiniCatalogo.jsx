@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import zelda from '../assets/images/zelda.jpg';
-import cyberpunk from '../assets/images/Cyberpunk-2077.jpg';
-import eldenring from '../assets/images/EldenRin.jpg';
-import minecraft from '../assets/images/maicra.jpg';
+import silksong from '../assets/images/Silksong.jpg';
+import peak from '../assets/images/peak.jpg';
+import hd2 from '../assets/images/helldivers.jpg';
+import bloodborne from '../assets/images/Bloodborne.jpg';
+
 import gow from '../assets/images/god-war-ragnarok-2872129.webp';
 import fornai from '../assets/images/fornai.jpg';
-import '../assets/css/ofertas.css';
+import '../assets/css/MiniCatalogo.css';
 import { useInView } from 'react-intersection-observer';
 import '../assets/css/ComponenteAnimado.css';
 
@@ -13,35 +14,27 @@ const MiniCatalogo = () => {
     const games = [
         {
             id: 1,
-            name: 'The Legend of Zelda',
-            price: '$53.99',
-            originalPrice: '$59.99',
-            discount: '10%',
-            image: zelda // Imagen más grande
+            name: 'Hollow Knight: Silksong',
+            originalPrice: '$7.99',
+            image: silksong // Imagen más grande
         },
         {
             id: 2,
-            name: 'Cyberpunk 2077',
-            price: '$27.99',
-            originalPrice: '$39.99',
-            discount: '30%',
-            image: cyberpunk
+            name: 'Peak',
+            originalPrice: '$10.99',
+            image: peak
         },
         {
             id: 3,
-            name: 'Elden Ring',
-            price: '$37.49',
+            name: 'Helldivers 2',
             originalPrice: '$49.99',
-            discount: '25%',
-            image: eldenring
+            image: hd2
         },
         {
             id: 4,
-            name: 'Minecraft',
-            price: '$22.90',
+            name: 'Bloodborne',
             originalPrice: '$26.95',
-            discount: '15%',
-            image: minecraft
+            image: bloodborne
         },
         {
             id: 5,
@@ -69,8 +62,8 @@ const MiniCatalogo = () => {
     const [juegos] = useState(games);
     return (
         <div ref={ref} className={`ticker-container componente ${inView ? 'visible' : 'oculto'}`}>
-            <h1>🎮 Nuestro Mini Catálogo de Videojuegos</h1>
-            <p className="total-juegos">Total de títulos: {juegos.length}</p>
+            <h2 className='ticker-header featured-title'>🎮 Catálogo de Videojuegos</h2>
+            <p className="ticker-header featured-title">Total de títulos: {juegos.length}</p>
 
             <div className="lista-juegos">
                 {/* 2. Mapeamos el array de 'juegos' para renderizar un componente por cada juego */}
@@ -87,8 +80,8 @@ const MiniCatalogo = () => {
                         />
                         <h2 className="game-name">{game.name}
                         </h2>
-                        <p className="game-plataforma">
-                            **Precio:** {game.originalPrice}
+                        <p className="game-price">
+                            {game.originalPrice}
                         </p>
                     </div>
                 ))}
