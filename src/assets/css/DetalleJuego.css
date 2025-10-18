@@ -1,0 +1,74 @@
+
+/* Estilos de la Vista de Detalle */
+
+.detalle-contenedor {
+    background: rgba(15, 12, 41, 0.8);
+    padding: 25px 0;
+    margin: 25px 0;
+    border-radius: 20px;
+    border: 1px solid rgba(var(--rgb-primary), 0.3);
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    backdrop-filter: blur(15px);
+}
+
+.detalle-tarjeta {
+    display: flex;
+    gap: 30px;
+}
+
+.detalle-imagen {
+    width: 300px;
+    height: 200px;
+    padding: 10px 25px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.detalle-info h1 {
+    color: white;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-shadow: 
+    0 0 20px rgba(var(--rgb-primary), 0.8),
+    0 0 40px rgba(var(--rgb-primary), 0.4);
+  position: relative;
+  z-index: 2;
+  margin-bottom: 3rem !important;
+}
+
+.detalle-precio .precio-actual {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #00bcd4;
+}
+
+.boton-volver {
+    background: linear-gradient(45deg, rgba(var(--rgb-primary), 0.9), rgba(var(--rgb-secondary), 0.9));
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  margin-left: 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  width: 20%;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(var(--rgb-primary), 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.boton-volver:hover {
+    background-color: #777;
+}
+
+.detalle-descripcion {
+    color: white;
+  text-shadow: 
+    0 0 20px rgba(var(--rgb-primary), 0.8),
+    0 0 40px rgba(var(--rgb-primary), 0.4);
+  position: relative;
+  z-index: 2;
+  margin-bottom: 3rem !important;
+}
