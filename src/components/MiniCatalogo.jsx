@@ -19,7 +19,11 @@ const MiniCatalogo = () => {
             name: 'Hollow Knight: Silksong',
             originalPrice: '$7.99',
             image: silksong,
-            description: 'Embárcate en una nueva aventura en el reino de Hallownest como Hornet, enfrentándote a nuevos enemigos y explorando vastos paisajes.'
+            description: 'Embárcate en una nueva aventura en el reino de Hallownest como Hornet, enfrentándote a nuevos enemigos y explorando vastos paisajes.',
+            valoracion: '⭐⭐⭐⭐⭐',
+            plataformas:'PC / PS5 / Xbox Series X/S / Nintendo Switch 2',
+            creador: 'Team Cherry',
+            genero: 'Metroidvania'
         },
         {
             id: 2,
