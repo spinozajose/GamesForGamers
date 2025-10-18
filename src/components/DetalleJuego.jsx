@@ -31,13 +31,15 @@ const DetalleJuego = ({ juego, onVolver }) => {
         <div className="detalle-descripcion">
           <p>{juego.description}</p>
         </div>
-        <div className="detalle-comprar-seccion">
+
+      </div>
+      <div className="detalle-comprar-seccion">
+        <div className="">
           <button className="detalle-comprar-boton">
             Comprar Ahora
           </button>
         </div>
       </div>
-
     </div>
   );
 };

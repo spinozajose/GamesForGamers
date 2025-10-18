@@ -27,22 +27,22 @@
 
 .detalle-imagen {
     width: 300px;
-    height: 200px;
+    height: 260px;
     padding: 10px 25px;
     object-fit: cover;
     border-radius: 8px;
 }
 
-.detalle-info h1 {
+.detalle-info {
     color: white;
-    font-size: 1.5rem;
+
     font-weight: 800;
     text-shadow:
         0 0 20px rgba(var(--rgb-primary), 0.8),
         0 0 40px rgba(var(--rgb-primary), 0.4);
     position: relative;
     z-index: 2;
-    margin-bottom: 3rem !important;
+    margin-bottom: 10 px;
 }
 
 .detalle-precio .precio-actual {
@@ -88,9 +88,10 @@
 
 .detalle-comprar-seccion {
     display: flex;
-    margin-top: 20px;
+
     margin-right: 50px;
     flex-direction: row-reverse;
+    flex-direction: column-reverse;
 }
 
 .detalle-comprar-boton {
@@ -98,6 +99,7 @@
     border: none;
     color: white;
     padding: 15px 30px;
+    margin: 10px;
     border-radius: 30px;
     font-weight: 700;
     font-size: 1.2rem;

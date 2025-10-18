@@ -3,9 +3,8 @@ import silksong from '../assets/images/Silksong.jpg';
 import peak from '../assets/images/peak.jpg';
 import hd2 from '../assets/images/helldivers.jpg';
 import bloodborne from '../assets/images/Bloodborne.jpg';
-
-import gow from '../assets/images/god-war-ragnarok-2872129.webp';
-import fornai from '../assets/images/fornai.jpg';
+import got from '../assets/images/got.jpg';
+import gta5 from '../assets/images/gta5.jpg';
 import '../assets/css/MiniCatalogo.css';
 import { useInView } from 'react-intersection-observer';
 import '../assets/css/ComponenteAnimado.css';
@@ -17,44 +16,68 @@ const MiniCatalogo = () => {
         {
             id: 1,
             name: 'Hollow Knight: Silksong',
-            originalPrice: '$7.99',
+            originalPrice: '$7.990',
             image: silksong,
             description: 'Embárcate en una nueva aventura en el reino de Hallownest como Hornet, enfrentándote a nuevos enemigos y explorando vastos paisajes.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PC / PS5 / Xbox Series X/S / Nintendo Switch 2',
+            plataformas:'PC / PS4 / PS5 / Xbox Series X/S / Nintendo Switch 2',
             creador: 'Team Cherry',
             genero: 'Metroidvania'
         },
         {
             id: 2,
             name: 'Peak',
-            originalPrice: '$10.99',
+            originalPrice: '$9.990',
             image: peak,
-            description: 'Experimenta la emoción de escalar montañas impresionantes, enfrentándote a desafíos climáticos y descubriendo vistas panorámicas.'
+            description: 'Experimenta la emoción de escalar montañas impresionantes, enfrentándote a desafíos climáticos y descubriendo vistas panorámicas.',
+            valoracion: '⭐⭐⭐⭐',
+            plataformas:'PC',
+            creador: 'Mountain Games',
+            genero: 'Aventura / Simulación'
         },
         {
             id: 3,
             name: 'Helldivers 2',
-            originalPrice: '$49.99',
-            image: hd2
+            originalPrice: '$49.990',
+            image: hd2,
+            description: 'Únete a la élite de los Helldivers en esta secuela llena de acción, luchando contra amenazas alienígenas para proteger la Super Tierra.',
+            valoracion: '⭐⭐⭐⭐⭐',
+            plataformas:'PC / PS5 / Xbox Series X/S',
+            creador: 'Arrowhead Game Studios',
+            genero: 'Shooter / Cooperativo'
         },
         {
             id: 4,
             name: 'Bloodborne',
-            originalPrice: '$26.95',
-            image: bloodborne
+            originalPrice: '$14.990',
+            image: bloodborne,
+            description: 'Adéntrate en la oscura y gótica ciudad de Yharnam, enfrentándote a bestias aterradoras y desentrañando los secretos de una antigua maldición.',
+            valoracion: '⭐⭐⭐⭐⭐',
+            plataformas:'PS4 / PS5',
+            creador: 'FromSoftware',
+            genero: 'RPG / Acción'
         },
         {
             id: 5,
-            name: 'God of War',
-            originalPrice: '$49.99',
-            image: gow
+            name: 'Ghost of Tsushima',
+            originalPrice: '$19.990',
+            image: got,
+            description: 'Embárcate en un viaje épico como Jin Sakai, un samurái que lucha por salvar su hogar de la invasión mongola.',
+            valoracion: '⭐⭐⭐⭐⭐',
+            plataformas:'PS4 / PS5',
+            creador: 'Sucker Punch Productions',
+            genero: 'Acción / Aventura'
         },
         {
             id: 6,
-            name: 'Fortnite',
-            originalPrice: 'Gratis',
-            image: fornai
+            name: 'Grand Theft Auto V',
+            originalPrice: '$19.990',
+            image: gta5,
+            description: 'Sumérgete en el mundo abierto de Los Santos, realizando misiones emocionantes y explorando una ciudad vibrante llena de vida.',
+            valoracion: '⭐⭐⭐⭐⭐',
+            plataformas:'PC / PS4 / PS5 / Xbox One / Xbox Series X/S',
+            creador: 'Rockstar Games',
+            genero: 'Acción / Aventura'
         }
     ];
 
