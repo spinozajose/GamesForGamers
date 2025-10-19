@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import GameTicker from "../components/GameTicker";
-import "../assets/css/Precompras.css"; // Importa el CSS de covers 3D
+import GameTicker from "../components/CatalogoOfertas";
+import "../assets/css/Precompras.css";
+import "../assets/css/AnimacionBalatro.css";
+import cubiertaFlotante1 from '../assets/images/Comod_n.png';
+import cubiertaFlotante2 from '../assets/images/Comod_n.png';
 
 function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -21,7 +24,7 @@ function Home() {
   const featuredGames = [
     {
       id: 1,
-      title: "Grand Thef Auto VI",
+      title: "Grand Theft Auto VI",
       image: "https://imagenes.elpais.com/resizer/v2/XOC4Q6EPWECJADRXQLJIXU5PNE.jpg?auth=ee24d91053a568132991fa4bd996180e6a2d47a05155287955e67f00ae49d046&width=1000",
       price: "$27.99",
       originalPrice: "$39.99",
@@ -50,6 +53,35 @@ function Home() {
 
   return (
     <div>
+      {/* Cubiertas flotantes */}
+      <div 
+        className="cubierta-flotante cubierta-izquierda"
+        style={{
+          transform: `translate(${-mousePosition.x}px, ${mousePosition.y}px)`
+        }}
+      >
+        <img 
+          src={cubiertaFlotante1} 
+          alt="Cubierta izquierda" 
+          className="cubierta-3d"
+        />
+        <div className="resplandor-cubierta"></div>
+      </div>
+
+      <div 
+        className="cubierta-flotante cubierta-derecha"
+        style={{
+          transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`
+        }}
+      >
+        <img 
+          src={cubiertaFlotante2} 
+          alt="Cubierta derecha" 
+          className="cubierta-3d"
+        />
+        <div className="resplandor-cubierta"></div>
+      </div>
+
       {/* Sección Juegos Destacados 2.5D */}
       <section className="featured-games-section py-5">
         <div className="container">
@@ -103,8 +135,6 @@ function Home() {
 
       {/* GameTicker */}
       <GameTicker />
-      
-      {/* Resto del contenido */}
     </div>
   );
 }

@@ -17,18 +17,13 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <NavLink className="nav-link nav-link-neon" to="/">
-                Inicio
+              <NavLink className="nav-link nav-link-neon" to="/login">
+                Iniciar Sesion
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link nav-link-neon" to="/about">
-                Acerca
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link nav-link-neon" to="/contact">
-                Contacto
+              <NavLink className="nav-link nav-link-neon" to="/register">
+                Registrate
               </NavLink>
             </li>
           </ul>
