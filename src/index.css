@@ -73,3 +73,54 @@ body::before {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 0.8; }
 }
+
+/* Animaciones para el título y descripción */
+@keyframes neonPulse {
+  0% {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7),
+                 0 0 20px rgba(0, 255, 255, 0.5),
+                 0 0 30px rgba(0, 255, 255, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.9),
+                 0 0 40px rgba(0, 255, 255, 0.7),
+                 0 0 60px rgba(0, 255, 255, 0.5);
+  }
+}
+
+@keyframes pulseLine {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.1);
+  }
+}
+
+.hero-section {
+  position: relative;
+  z-index: 10;
+}
+
+.neon-text-glitch {
+  animation: neonPulse 2s ease-in-out infinite alternate;
+}
+
+.description-text {
+  position: relative;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
