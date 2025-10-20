@@ -1,13 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { 
-  useValidacionesRegister, 
-  formatearRUT 
-} from "../assets/js/ValidacionesRegister.js";
+import { useValidacionesRegister, formatearRUT } from "../assets/js/ValidacionesRegister.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Register() {
+function Register({ onRegister }) {
   const [formData, setFormData] = useState({
     nombre: "",
     rut: "",
@@ -24,109 +21,72 @@ function Register() {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // Usar el hook de validaciones
   const { validaciones, validarFormularioCompleto } = useValidacionesRegister();
 
-  // Manejar cambios en los inputs
   const handleChange = (field, value) => {
-    let valorFinal = value;
+    let valorFinal = field === "rut" ? formatearRUT(value) : value;
+    setFormData(prev => ({ ...prev, [field]: valorFinal }));
 
-    // Formatear RUT automáticamente
-    if (field === 'rut') {
-      valorFinal = formatearRUT(value);
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      [field]: valorFinal
-    }));
-
-    // Validar en tiempo real solo si el campo ya fue tocado
     if (touched[field]) {
-      const error = validaciones[field](valorFinal, formData);
-      setErrors(prev => ({
-        ...prev,
-        [field]: error
-      }));
+      setErrors(prev => ({ ...prev, [field]: validaciones[field](valorFinal, formData) }));
     }
   };
 
-  // Manejar blur (cuando el usuario sale del campo)
   const handleBlur = (field) => {
-    setTouched(prev => ({
-      ...prev,
-      [field]: true
-    }));
-
-    const error = validaciones[field](formData[field], formData);
-    setErrors(prev => ({
-      ...prev,
-      [field]: error
-    }));
+    setTouched(prev => ({ ...prev, [field]: true }));
+    setErrors(prev => ({ ...prev, [field]: validaciones[field](formData[field], formData) }));
   };
 
-  // Validar todo el formulario
   const validateForm = () => {
     const { esValido, errores } = validarFormularioCompleto(formData);
-    
-    // Marcar todos los campos como tocados
-    const newTouched = {};
-    Object.keys(formData).forEach(field => {
-      newTouched[field] = true;
-    });
-    
-    setTouched(newTouched);
+    const allTouched = Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {});
+    setTouched(allTouched);
     setErrors(errores);
-    
     return esValido;
   };
 
-  // Manejar envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (validateForm()) {
-      // Aquí envías los datos al backend
-      console.log("Formulario válido:", formData);
-      alert("¡Registro exitoso!");
-      // Tu lógica de envío al backend aquí
-      
-      // Resetear formulario después de éxito
+      if (onRegister) {
+        onRegister(formData);
+      } else {
+        console.log("Formulario válido:", formData);
+      }
       setFormData({
-        nombre: "",
-        rut: "",
-        username: "",
-        email: "",
-        direccion: "",
-        region: "",
-        ciudad: "",
-        comuna: "",
-        password: "",
-        confirmPassword: ""
+        nombre: "", rut: "", username: "", email: "",
+        direccion: "", region: "", ciudad: "", comuna: "",
+        password: "", confirmPassword: ""
       });
       setErrors({});
       setTouched({});
-    } else {
-      console.log("Errores en el formulario:", errors);
     }
   };
 
-  // Función para obtener estilo del input basado en errores
   const getInputStyle = (field, baseColor = "0,255,255") => {
-    if (touched[field] && errors[field]) {
-      return { 
-        boxShadow: "0 0 10px rgba(255,0,0,0.5)", 
-        border: "1px solid rgba(255,0,0,0.3)" 
-      };
-    }
-    if (touched[field] && !errors[field] && formData[field]) {
-      return { 
-        boxShadow: "0 0 10px rgba(0,255,0,0.3)", 
-        border: "1px solid rgba(0,255,0,0.3)" 
-      };
-    }
+    if (touched[field] && errors[field]) return { boxShadow: "0 0 10px rgba(255,0,0,0.5)", border: "1px solid rgba(255,0,0,0.3)" };
+    if (touched[field] && !errors[field] && formData[field]) return { boxShadow: "0 0 10px rgba(0,255,0,0.3)", border: "1px solid rgba(0,255,0,0.3)" };
     return { boxShadow: `0 0 10px rgba(${baseColor},0.2)` };
   };
+
+  const renderInput = (label, field, type = "text", placeholder = "", color) => (
+    <div className="mb-3">
+      <label htmlFor={field} className="form-label text-light">{label} *</label>
+      <input
+        id={field}
+        name={field}
+        type={type}
+        className="form-control bg-dark text-light border-0"
+        placeholder={placeholder}
+        style={getInputStyle(field, color)}
+        value={formData[field]}
+        onChange={(e) => handleChange(field, e.target.value)}
+        onBlur={() => handleBlur(field)}
+        required
+      />
+      {touched[field] && errors[field] && <div className="text-warning small mt-1">{errors[field]}</div>}
+    </div>
+  );
 
   return (
     <div className="d-flex align-items-center justify-content-center vh-100">
@@ -136,13 +96,9 @@ function Register() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="card p-4 shadow-lg"
         style={{
-          width: "450px",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          background: "rgba(15, 12, 41, 0.85)",
-          borderRadius: "1rem",
-          border: "1px solid rgba(255,255,255,0.1)",
-          backdropFilter: "blur(8px)",
+          width: "450px", maxHeight: "90vh", overflowY: "auto",
+          background: "rgba(15, 12, 41, 0.85)", borderRadius: "1rem",
+          border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(8px)",
           boxShadow: "0 0 25px rgba(0,255,255,0.4)",
         }}
       >
@@ -161,97 +117,18 @@ function Register() {
         </motion.h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Información Personal */}
-          <div className="mb-3">
-            <label className="form-label text-light">Nombre completo *</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-light border-0"
-              placeholder="Tu nombre completo"
-              style={getInputStyle('nombre', "255,255,0")}
-              value={formData.nombre}
-              onChange={(e) => handleChange('nombre', e.target.value)}
-              onBlur={() => handleBlur('nombre')}
-              required
-            />
-            {touched.nombre && errors.nombre && (
-              <div className="text-warning small mt-1">{errors.nombre}</div>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label text-light">RUT *</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-light border-0"
-              placeholder="12.345.678-9"
-              style={getInputStyle('rut')}
-              value={formData.rut}
-              onChange={(e) => handleChange('rut', e.target.value)}
-              onBlur={() => handleBlur('rut')}
-              required
-            />
-            {touched.rut && errors.rut && (
-              <div className="text-warning small mt-1">{errors.rut}</div>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label text-light">Nombre de usuario *</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-light border-0"
-              placeholder="Tu nombre o alias"
-              style={getInputStyle('username', "255,255,0")}
-              value={formData.username}
-              onChange={(e) => handleChange('username', e.target.value)}
-              onBlur={() => handleBlur('username')}
-              required
-            />
-            {touched.username && errors.username && (
-              <div className="text-warning small mt-1">{errors.username}</div>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label text-light">Correo electrónico *</label>
-            <input
-              type="email"
-              className="form-control bg-dark text-light border-0"
-              placeholder="tucorreo@ejemplo.com"
-              style={getInputStyle('email')}
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              onBlur={() => handleBlur('email')}
-              required
-            />
-            {touched.email && errors.email && (
-              <div className="text-warning small mt-1">{errors.email}</div>
-            )}
-          </div>
-
-          {/* Información de Dirección */}
-          <div className="mb-3">
-            <label className="form-label text-light">Dirección *</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-light border-0"
-              placeholder="Calle, número, departamento"
-              style={getInputStyle('direccion', "255,0,128")}
-              value={formData.direccion}
-              onChange={(e) => handleChange('direccion', e.target.value)}
-              onBlur={() => handleBlur('direccion')}
-              required
-            />
-            {touched.direccion && errors.direccion && (
-              <div className="text-warning small mt-1">{errors.direccion}</div>
-            )}
-          </div>
+          {renderInput("Nombre completo", "nombre", "text", "Tu nombre completo", "255,255,0")}
+          {renderInput("RUT", "rut", "text", "12.345.678-9")}
+          {renderInput("Nombre de usuario", "username", "text", "Tu nombre o alias", "255,255,0")}
+          {renderInput("Correo electrónico", "email", "email", "tucorreo@ejemplo.com")}
+          {renderInput("Dirección", "direccion", "text", "Calle, número, departamento", "255,0,128")}
 
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label className="form-label text-light">Región *</label>
-              <select 
+              <label htmlFor="region" className="form-label text-light">Región *</label>
+              <select
+                id="region"
+                name="region"
                 className="form-control bg-dark text-light border-0"
                 style={getInputStyle('region', "255,255,0")}
                 value={formData.region}
@@ -264,34 +141,20 @@ function Register() {
                 <option value="v">Valparaíso</option>
                 <option value="viii">Biobío</option>
                 <option value="x">Los Lagos</option>
-                {/* Agrega más regiones según necesites */}
               </select>
-              {touched.region && errors.region && (
-                <div className="text-warning small mt-1">{errors.region}</div>
-              )}
+              {touched.region && errors.region && <div className="text-warning small mt-1">{errors.region}</div>}
             </div>
-            
+
             <div className="col-md-6 mb-3">
-              <label className="form-label text-light">Ciudad *</label>
-              <input
-                type="text"
-                className="form-control bg-dark text-light border-0"
-                placeholder="Tu ciudad"
-                style={getInputStyle('ciudad')}
-                value={formData.ciudad}
-                onChange={(e) => handleChange('ciudad', e.target.value)}
-                onBlur={() => handleBlur('ciudad')}
-                required
-              />
-              {touched.ciudad && errors.ciudad && (
-                <div className="text-warning small mt-1">{errors.ciudad}</div>
-              )}
+              {renderInput("Ciudad", "ciudad", "text", "Tu ciudad")}
             </div>
           </div>
 
           <div className="mb-3">
-            <label className="form-label text-light">Comuna *</label>
-            <select 
+            <label htmlFor="comuna" className="form-label text-light">Comuna *</label>
+            <select
+              id="comuna"
+              name="comuna"
               className="form-control bg-dark text-light border-0"
               style={getInputStyle('comuna', "255,0,128")}
               value={formData.comuna}
@@ -305,47 +168,16 @@ function Register() {
               <option value="las-condes">Las Condes</option>
               <option value="nunoa">Ñuñoa</option>
               <option value="maipu">Maipú</option>
-              {/* Agrega más comunas según necesites */}
             </select>
-            {touched.comuna && errors.comuna && (
-              <div className="text-warning small mt-1">{errors.comuna}</div>
-            )}
+            {touched.comuna && errors.comuna && <div className="text-warning small mt-1">{errors.comuna}</div>}
           </div>
 
-          {/* Contraseñas */}
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label className="form-label text-light">Contraseña *</label>
-              <input
-                type="password"
-                className="form-control bg-dark text-light border-0"
-                placeholder="********"
-                style={getInputStyle('password', "255,0,128")}
-                value={formData.password}
-                onChange={(e) => handleChange('password', e.target.value)}
-                onBlur={() => handleBlur('password')}
-                required
-              />
-              {touched.password && errors.password && (
-                <div className="text-warning small mt-1">{errors.password}</div>
-              )}
+              {renderInput("Contraseña", "password", "password", "********", "255,0,128")}
             </div>
-
             <div className="col-md-6 mb-4">
-              <label className="form-label text-light">Confirmar contraseña *</label>
-              <input
-                type="password"
-                className="form-control bg-dark text-light border-0"
-                placeholder="********"
-                style={getInputStyle('confirmPassword', "255,255,0")}
-                value={formData.confirmPassword}
-                onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                onBlur={() => handleBlur('confirmPassword')}
-                required
-              />
-              {touched.confirmPassword && errors.confirmPassword && (
-                <div className="text-warning small mt-1">{errors.confirmPassword}</div>
-              )}
+              {renderInput("Confirmar contraseña", "confirmPassword", "password", "********", "255,255,0")}
             </div>
           </div>
 
@@ -356,8 +188,7 @@ function Register() {
             className="btn w-100 fw-bold mt-2"
             style={{
               background: "linear-gradient(90deg, rgb(var(--rgb-primary)), rgb(var(--rgb-secondary)))",
-              color: "#fff",
-              border: "none",
+              color: "#fff", border: "none",
             }}
           >
             Registrarse
@@ -368,11 +199,7 @@ function Register() {
               ¿Ya tienes cuenta?{" "}
               <Link
                 to="/login"
-                style={{
-                  color: "rgb(var(--rgb-accent))",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
+                style={{ color: "rgb(var(--rgb-accent))", textDecoration: "none", fontWeight: "bold" }}
               >
                 Inicia sesión
               </Link>
