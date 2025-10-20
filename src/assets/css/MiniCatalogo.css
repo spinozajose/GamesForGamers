@@ -317,3 +317,50 @@
   z-index: 2;
   margin-bottom: 3rem !important;
 }
+
+.filtro-botones { 
+    color: white;
+    text-shadow: 
+    0 0 10px rgba(var(--rgb-primary), 0.8),
+    0 0 20px rgba(var(--rgb-primary), 0.6),
+    0 0 30px rgba(var(--rgb-primary), 0.4);
+    padding: 15px 30px;
+    margin: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;    
+}
+
+.filtro-botones button {
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 20px;
+    font-weight: 600;
+    box-shadow:
+        0 0 15px rgba(var(--rgb-primary), 0.6),
+        0 0 25px rgba(var(--rgb-secondary), 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.filtro-activo {
+    background: linear-gradient(45deg, rgba(var(--rgb-primary), 0.9), rgba(var(--rgb-secondary), 0.9));
+    font-weight: bold;
+    border-color: #00bcd4;
+    box-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+}
+
+.filtro-inactivo {
+    background-color: #444;
+    color: #eee;
+}
+
+.filtro-inactivo:hover {
+    background-color: #555;
+    border-color: #888;
+}

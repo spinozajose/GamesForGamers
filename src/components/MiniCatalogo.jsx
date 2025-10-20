@@ -9,7 +9,6 @@ import '../assets/css/MiniCatalogo.css';
 import { useInView } from 'react-intersection-observer';
 import '../assets/css/ComponenteAnimado.css';
 import DetalleJuego from './DetalleJuego';
-import { desc } from 'framer-motion/client';
 
 const MiniCatalogo = () => {
     const games = [
@@ -20,7 +19,7 @@ const MiniCatalogo = () => {
             image: silksong,
             description: 'Embárcate en una nueva aventura en el reino de Hallownest como Hornet, enfrentándote a nuevos enemigos y explorando vastos paisajes.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PC / PS4 / PS5 / Xbox Series X/S / Nintendo Switch 2',
+            plataformas: 'PC / PS4 / PS5 / Xbox Series X/S / Nintendo Switch 2',
             creador: 'Team Cherry',
             genero: 'Metroidvania'
         },
@@ -31,7 +30,7 @@ const MiniCatalogo = () => {
             image: peak,
             description: 'Experimenta la emoción de escalar montañas impresionantes, enfrentándote a desafíos climáticos y descubriendo vistas panorámicas.',
             valoracion: '⭐⭐⭐⭐',
-            plataformas:'PC',
+            plataformas: 'PC',
             creador: 'Mountain Games',
             genero: 'Aventura / Simulación'
         },
@@ -42,7 +41,7 @@ const MiniCatalogo = () => {
             image: hd2,
             description: 'Únete a la élite de los Helldivers en esta secuela llena de acción, luchando contra amenazas alienígenas para proteger la Super Tierra.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PC / PS5 / Xbox Series X/S',
+            plataformas: 'PC / PS5 / Xbox Series X/S',
             creador: 'Arrowhead Game Studios',
             genero: 'Shooter / Cooperativo'
         },
@@ -53,7 +52,7 @@ const MiniCatalogo = () => {
             image: bloodborne,
             description: 'Adéntrate en la oscura y gótica ciudad de Yharnam, enfrentándote a bestias aterradoras y desentrañando los secretos de una antigua maldición.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PS4 / PS5',
+            plataformas: 'PS4 / PS5',
             creador: 'FromSoftware',
             genero: 'RPG / Acción'
         },
@@ -64,7 +63,7 @@ const MiniCatalogo = () => {
             image: got,
             description: 'Embárcate en un viaje épico como Jin Sakai, un samurái que lucha por salvar su hogar de la invasión mongola.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PS4 / PS5',
+            plataformas: 'PS4 / PS5',
             creador: 'Sucker Punch Productions',
             genero: 'Acción / Aventura'
         },
@@ -75,7 +74,7 @@ const MiniCatalogo = () => {
             image: gta5,
             description: 'Sumérgete en el mundo abierto de Los Santos, realizando misiones emocionantes y explorando una ciudad vibrante llena de vida.',
             valoracion: '⭐⭐⭐⭐⭐',
-            plataformas:'PC / PS4 / PS5 / Xbox One / Xbox Series X/S',
+            plataformas: 'PC / PS4 / PS5 / Xbox One / Xbox Series X/S',
             creador: 'Rockstar Games',
             genero: 'Acción / Aventura'
         }
@@ -85,7 +84,11 @@ const MiniCatalogo = () => {
         threshold: 0,
         triggerOnce: true,
     });
-    const [juegoSeleccionado, setJuegoSeleccionado] = useState(null); 
+    const [juegoSeleccionado, setJuegoSeleccionado] = useState(null);
+
+    const [juegos] = useState(games);
+
+    const [filtroCategoria, setFiltroCategoria] = useState('Todos');
 
     const handleSeleccionarJuego = (juego) => {
         setJuegoSeleccionado(juego);
@@ -94,31 +97,61 @@ const MiniCatalogo = () => {
     const handleVolverACatalogo = () => {
         setJuegoSeleccionado(null);
     };
-    const [juegos] = useState(games);
+
+    const handleFiltrarPorCategoria = (categoria) => {
+        setFiltroCategoria(categoria);
+        setJuegoSeleccionado(null);
+    };
+
+    const juegosFiltrados = juegos.filter(juego => {
+        if (filtroCategoria === 'Todos') {
+            return true;
+        }
+        return juego.genero.includes(filtroCategoria); 
+    });
+
+    const categoriasUnicas = ['Todos', ...new Set(juegos.flatMap(j => (j.genero ?? '').split(' / ')))];
 
     if (juegoSeleccionado) {
         return (
-            <DetalleJuego 
-                juego={juegoSeleccionado} 
-                onVolver={handleVolverACatalogo} 
+            <DetalleJuego
+                juego={juegoSeleccionado}
+                onVolver={handleVolverACatalogo}
             />
         );
     }
 
 
-    
+
     return (
         <div ref={ref} className={`ticker-container componente ${inView ? 'visible' : 'oculto'}`}>
             <h2 className='ticker-header featured-title'>🎮 Catálogo de Videojuegos</h2>
-            <p className="ticker-header featured-title">Total de títulos: {juegos.length}</p>
+            <div className="filtro-botones">
+                <h3>Filtrar por:</h3>
+                {categoriasUnicas.map(categoria => (
+                    <button
+                        key={categoria}
+                        className={filtroCategoria === categoria ? 'filtro-activo' : 'filtro-inactivo'}
+                        onClick={() => handleFiltrarPorCategoria(categoria)}
+                    >
+                        {categoria}
+                    </button>
+                ))}
+            </div>
+
+            <p className="ticker-header featured-title">
+                Total de títulos disponibles: {juegosFiltrados.length}
+            </p>
+
+            <div className="lista-juegos"></div>
 
             <div className="lista-juegos">
-                {juegos.map((game) => (
-                    <div 
-                        key={game.id} 
+                {juegosFiltrados.map((game) => (
+                    <div
+                        key={game.id}
                         className="game-item clickable"
-                        onClick={() => handleSeleccionarJuego(game)} 
-                    >                        
+                        onClick={() => handleSeleccionarJuego(game)}
+                    >
                         <img
                             src={game.image}
                             alt={game.name}
@@ -137,6 +170,7 @@ const MiniCatalogo = () => {
                         </div>
                     </div>
                 ))}
+
             </div>
         </div>
     );
