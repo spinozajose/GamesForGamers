@@ -18,6 +18,8 @@ import Productos from './components/Admin/Productos';
 import Categorias from './components/Admin/Categorias';
 import Usuarios from './components/Admin/Usuarios';
 import Reportes from './components/Admin/Reportes';
+import NuevoProducto from './components/Admin/NuevoProducto';
+import NuevaCategoria from './components/Admin/NuevaCategoria';
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
           <Route path="/admin/ordenes" element={<Ordenes />} />
           <Route path= "/admin/usuarios" element= {<Usuarios />} />
           <Route path="/admin/reportes" element={<Reportes />} />
+          <Route path="/admin/productos/nuevoproducto" element={<NuevoProducto />} />
+          <Route path="/admin/categorias/nuevacategoria" element={<NuevaCategoria />} />
           <Route path="/admin/ordenes/:id" element={<Boletas />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/precompras" element={<Precompras />} /> {/* ✅ AGREGAR ESTA RUTA */}

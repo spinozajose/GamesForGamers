@@ -81,15 +81,7 @@ function Usuarios() {
                               </Link>
                             </li>
                           </ul>
-                          <hr className="my-3" />
-                          <ul className="nav flex-column mb-auto">
-                            <li className="nav-item mx-2">
-                              <a className="nav-link nav-menu d-flex gap-2" href="/admin/perfil/index.html">
-                                <i className="bi bi-person-circle" />
-                                Perfil
-                              </a>
-                            </li>
-                          </ul>
+                          
                           <hr className="my-3" />
                           <ul className="nav flex-column mb-auto">
                             <li className="nav-item mt-2 mx-2">
@@ -99,10 +91,10 @@ function Usuarios() {
                               </a>
                             </li>
                             <li className="nav-item mt-2 mx-2">
-                              <a className="mx-4 text-center d-flex gap-2 btn btn-danger" href="/iniciar-sesion.html">
+                              <Link className="mx-4 text-center d-flex gap-2 btn btn-danger" to="/login">
                                 <i className="bi bi-door-closed" />
                                 Cerrar Sesión
-                              </a>
+                              </Link>
                             </li>
                           </ul>
           </div>
@@ -136,12 +128,6 @@ function Usuarios() {
                           <li><a class="dropdown-item" href="/#">Separated link</a></li>
                       </ul>
                   </li> */}
-            <li className="nav-item">
-              <a className="nav-link nav-menu" href="/admin/usuario/index-personajes.html">Listado personajes</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link nav-menu" href="/admin/usuario/nuevo.html">Nuevo usuario</a>
-            </li>
           </ul>
           <div className="card text-start">
             <div className="card-body">

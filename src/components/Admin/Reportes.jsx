@@ -82,15 +82,7 @@ function Reportes() {
                               </Link>
                             </li>
                           </ul>
-                          <hr className="my-3" />
-                          <ul className="nav flex-column mb-auto">
-                            <li className="nav-item mx-2">
-                              <a className="nav-link nav-menu d-flex gap-2" href="/admin/perfil/index.html">
-                                <i className="bi bi-person-circle" />
-                                Perfil
-                              </a>
-                            </li>
-                          </ul>
+                          
                           <hr className="my-3" />
                           <ul className="nav flex-column mb-auto">
                             <li className="nav-item mt-2 mx-2">
@@ -100,10 +92,10 @@ function Reportes() {
                               </a>
                             </li>
                             <li className="nav-item mt-2 mx-2">
-                              <a className="mx-4 text-center d-flex gap-2 btn btn-danger" href="/iniciar-sesion.html">
+                              <Link className="mx-4 text-center d-flex gap-2 btn btn-danger" to="/login">
                                 <i className="bi bi-door-closed" />
                                 Cerrar Sesión
-                              </a>
+                              </Link>
                             </li>
                           </ul>
           </div>

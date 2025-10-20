@@ -81,15 +81,7 @@ function Categorias() {
                 </Link>
               </li>
             </ul>
-            <hr className="my-3" />
-            <ul className="nav flex-column mb-auto">
-              <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/perfil/index.html">
-                  <i className="bi bi-person-circle" />
-                  Perfil
-                </a>
-              </li>
-            </ul>
+            
             <hr className="my-3" />
             <ul className="nav flex-column mb-auto">
               <li className="nav-item mt-2 mx-2">
@@ -99,10 +91,10 @@ function Categorias() {
                 </a>
               </li>
               <li className="nav-item mt-2 mx-2">
-                <a className="mx-4 text-center d-flex gap-2 btn btn-danger" href="/iniciar-sesion.html">
-                  <i className="bi bi-door-closed" />
-                  Cerrar Sesión
-                </a>
+                <Link className="mx-4 text-center d-flex gap-2 btn btn-danger" to="/login">
+                    <i className="bi bi-door-closed" />
+                    Cerrar Sesión
+                </Link>
               </li>
             </ul>
           </div>
@@ -124,7 +116,7 @@ function Categorias() {
               <a className="nav-link nav-menu active" aria-current="page" href="/admin/categoria">Listado de categorías</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link nav-menu" href="/admin/categoria/nuevo.html">Nueva categoría</a>
+              <Link className="nav-link nav-menu" to="/admin/categorias/nuevacategoria">Nueva categoría</Link>
             </li>
           </ul>
           <div className="card text-start">
