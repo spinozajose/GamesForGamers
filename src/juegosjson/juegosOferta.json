@@ -1,0 +1,50 @@
+[
+    { 
+      "id": 1, 
+      "name": "The Legend of Zelda", 
+      "price": "$39.990", 
+      "originalPrice": "$44.990",
+      "discount": "11%",
+      "image": "zelda.jpg"
+    },
+    { 
+      "id": 2, 
+      "name": "Cyberpunk 2077", 
+      "price": "$19.990", 
+      "originalPrice": "$29.990",
+      "discount": "33%",
+      "image": "cyberpunk.jpg"
+    },
+    { 
+      "id": 3, 
+      "name": "Elden Ring", 
+      "price": "$27.990", 
+      "originalPrice": "$37.990",
+      "discount": "26%",
+      "image": "eldenring.jpg"
+    },
+    { 
+      "id": 4, 
+      "name": "Minecraft", 
+      "price": "$16.990", 
+      "originalPrice": "$19.990",
+      "discount": "15%",
+      "image": "minecraft.jpg"
+    },
+    { 
+      "id": 5, 
+      "name": "God of War", 
+      "price": "$29.990", 
+      "originalPrice": "$37.990",
+      "discount": "21%",
+      "image": "gow.webp"
+    },
+    { 
+      "id": 6, 
+      "name": "Resident evil 4 Remake", 
+      "price": "$9.990", 
+      "originalPrice": "$17.990",
+      "discount": "44%",
+      "image": "re4gold.webp"
+    }
+]

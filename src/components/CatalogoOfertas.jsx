@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+const RAWG_API_KEY = import.meta.env.VITE_RAWG_API_KEY;
 import { motion } from 'framer-motion';
+import gamesData from '../juegosjson/juegosOferta.json'; 
 import zelda from '../assets/images/zelda.jpg';
 import cyberpunk from '../assets/images/Cyberpunk-2077.jpg';
 import eldenring from '../assets/images/EldenRin.jpg';
@@ -10,6 +12,20 @@ import '../assets/css/ofertas.css';
 import { useInView } from 'react-intersection-observer';
 import '../assets/css/ComponenteAnimado.css';
 
+const imageMap = {
+    'zelda.jpg': zelda,
+    'cyberpunk.jpg': cyberpunk,
+    'eldenring.jpg': eldenring,
+    'minecraft.jpg': minecraft,
+    'gow.webp': gow,
+    're4gold.webp': re4gold,
+};
+
+const games = gamesData.map(game => ({
+    ...game,
+    image: imageMap[game.image] 
+}));
+
 const GameTicker = () => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
@@ -17,58 +33,7 @@ const GameTicker = () => {
     seconds: 0
   });
 
-  const games = [
-    { 
-      id: 1, 
-      name: 'The Legend of Zelda', 
-      price: '$39.990', 
-      originalPrice: '$44.990',
-      discount: '11%',
-      image: zelda
-    },
-    { 
-      id: 2, 
-      name: 'Cyberpunk 2077', 
-      price: '$19.990', 
-      originalPrice: '$29.990',
-      discount: '33%',
-      image: cyberpunk
-    },
-    { 
-      id: 3, 
-      name: 'Elden Ring', 
-      price: '$27.990', 
-      originalPrice: '$37.990',
-      discount: '26%',
-      image: eldenring
-    },
-    { 
-      id: 4, 
-      name: 'Minecraft', 
-      price: '$16.990', 
-      originalPrice: '$19.990',
-      discount: '15%',
-      image: minecraft
-    },
-    { 
-      id: 5, 
-      name: 'God of War', 
-      price: '$29.990', 
-      originalPrice: '$37.990',
-      discount: '21%',
-      image: gow
-    },
-    { 
-      id: 6, 
-      name: 'Resident evil 4 Remake', 
-      price: '$9.990', 
-      originalPrice: '$17.990',
-      discount: '44%',
-      image: re4gold
-    }
-  ];
 
-  // Contador de ofertas Deluxe - 14 horas
   useEffect(() => {
     const endTime = new Date();
     endTime.setHours(endTime.getHours() + 14);
@@ -338,7 +303,7 @@ const GameTicker = () => {
           {duplicatedGames.map((game, index) => (
             <div key={`${game.id}-${index}`} className="game-item">
               <img 
-                src={game.image} 
+                src={game.image} // Utiliza la importación de imagen
                 alt={game.name}
                 className="game-image"
                 onError={(e) => {
