@@ -13,7 +13,7 @@ const Precompras = () => {
     {
       id: 1,
       titulo: "Grand Theft Auto VI",
-      imagen: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/gta6.jpg",
       precioActual: 74990,
       precioOriginal: 84990,
       descuento: 12,
@@ -24,7 +24,7 @@ const Precompras = () => {
     {
       id: 2,
       titulo: "Resident Evil Requiem",
-      imagen: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/requiem.jpeg",
       precioActual: 59990,
       precioOriginal: 69990,
       descuento: 14,
@@ -35,7 +35,7 @@ const Precompras = () => {
     {
       id: 3,
       titulo: "Invincible VS",
-      imagen: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/invicible.jpg",
       precioActual: 54990,
       precioOriginal: 64990,
       descuento: 15,
@@ -46,7 +46,7 @@ const Precompras = () => {
     {
       id: 4,
       titulo: "Lego Batman: Legacy of the Dark Knight",
-      imagen: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/batmanlego.jpeg",
       precioActual: 49990,
       precioOriginal: 59990,
       descuento: 17,
@@ -57,7 +57,7 @@ const Precompras = () => {
     {
       id: 5,
       titulo: "The Duskbloods",
-      imagen: "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/duskblood.jpeg",
       precioActual: 64990,
       precioOriginal: 74990,
       descuento: 13,
@@ -68,7 +68,7 @@ const Precompras = () => {
     {
       id: 6,
       titulo: "WWE 2K26",
-      imagen: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?w=400&h=300&fit=crop",
+      imagen: "src/assets/images/wwe26.jpg",
       precioActual: 59990,
       precioOriginal: 69990,
       descuento: 14,

@@ -86,7 +86,7 @@ const MiniCatalogo = () => {
         {
             id: 7,
             name: 'Sons of the Forest',
-            originalPrice: '$29.99',
+            originalPrice: '$19.990',
             image: softf, 
             description: 'Un simulador de terror y supervivencia en mundo abierto donde eres enviado a una isla remota para encontrar a un multimillonario desaparecido. Te encuentras en un infierno de caníbales y mutantes. Cuenta con mecánicas de crafteo y construcción muy mejoradas respecto al original.',
             valoracion: '⭐⭐⭐⭐⭐', 
@@ -98,7 +98,7 @@ const MiniCatalogo = () => {
             
             id: 8,
             name: 'The Legend of Zelda: Tears of the Kingdom',
-            originalPrice: '$39.99',
+            originalPrice: '$29.990',
             image: zelda2,
             description: 'Una secuela directa de Breath of the Wild, donde el héroe Link explora un mundo abierto masivo que ahora se extiende desde las profundidades de la tierra hasta las islas flotantes en el cielo de Hyrule. El juego se centra en la **experimentación** y la **creatividad** del jugador, introduciendo nuevas y poderosas habilidades de construcción y fusión de objetos.',
             valoracion: '⭐⭐⭐⭐⭐',
@@ -109,7 +109,7 @@ const MiniCatalogo = () => {
         {
             id: 9,
             name: "7 Days to Die",
-            originalPrice: "$24.99",
+            originalPrice: "$14.990",
             image: daystodie,
             description: "Un híbrido de supervivencia, shooter, RPG, crafting y defensa de torres. Los jugadores exploran un vasto mundo abierto post-apocalíptico lleno de zombis, construyen fortificaciones robustas y se preparan para las hordas que atacan cada siete días. El sistema RPG de habilidades permite la progresión en un mundo hostil.",
             modoJuego: "Un Jugador, Cooperativo Online (P2P o Servidor), Multijugador PvP.",
@@ -122,7 +122,7 @@ const MiniCatalogo = () => {
         {
             id: 10,
             name: "Palworld",
-            originalPrice: "$29.99",
+            originalPrice: "$15.990",
             image: palworld,
             description: "Un juego de mundo abierto de supervivencia y crafting con elementos de shooter. El objetivo es explorar un vasto mundo, construir bases, fabricar tecnología y capturar criaturas (Pals) para que luchen o trabajen. Incluye fuerte progresión RPG a través de niveles y el desbloqueo de un gran árbol de tecnología.",
             valoracion: '⭐⭐⭐⭐⭐',
@@ -133,7 +133,7 @@ const MiniCatalogo = () => {
         {
         id: 11,
         name: "Dying Light 2 Stay Human",
-        originalPrice: "$39.99",
+        originalPrice: "$18.990",
         image: dl2,
         description: "Un juego de Acción-RPG en primera persona con un mundo abierto. Destaca por el parkour fluido y el intenso combate. El ciclo día-noche introduce un fuerte elemento de terror y supervivencia, ya que la noche trae consigo zombis mucho más agresivos. La progresión se basa en el desbloqueo de habilidades para acceder a nuevas zonas de la ciudad (similar a la progresión Metroidvania).",
         valoracion: '⭐⭐⭐⭐⭐',
