@@ -21,49 +21,49 @@ const GameTicker = () => {
     { 
       id: 1, 
       name: 'The Legend of Zelda', 
-      price: '$53.99', 
-      originalPrice: '$59.99',
-      discount: '10%',
+      price: '$39.990', 
+      originalPrice: '$44.990',
+      discount: '11%',
       image: zelda
     },
     { 
       id: 2, 
       name: 'Cyberpunk 2077', 
-      price: '$27.99', 
-      originalPrice: '$39.99',
-      discount: '30%',
+      price: '$19.990', 
+      originalPrice: '$29.990',
+      discount: '33%',
       image: cyberpunk
     },
     { 
       id: 3, 
       name: 'Elden Ring', 
-      price: '$37.49', 
-      originalPrice: '$49.99',
-      discount: '25%',
+      price: '$27.990', 
+      originalPrice: '$37.990',
+      discount: '26%',
       image: eldenring
     },
     { 
       id: 4, 
       name: 'Minecraft', 
-      price: '$22.90', 
-      originalPrice: '$26.95',
+      price: '$16.990', 
+      originalPrice: '$19.990',
       discount: '15%',
       image: minecraft
     },
     { 
       id: 5, 
       name: 'God of War', 
-      price: '$39.99', 
-      originalPrice: '$49.99',
-      discount: '20%',
+      price: '$29.990', 
+      originalPrice: '$37.990',
+      discount: '21%',
       image: gow
     },
     { 
       id: 6, 
       name: 'Resident evil 4 Remake', 
-      price: '$12.99', 
-      originalPrice: '$22.99',
-      discount: '20%',
+      price: '$9.990', 
+      originalPrice: '$17.990',
+      discount: '44%',
       image: re4gold
     }
   ];
@@ -348,9 +348,9 @@ const GameTicker = () => {
               <div className="game-info">
                 <span className="game-name">{game.name}</span>
                 <div className="game-price-container">
-                  <span className="game-price">{game.price}</span>
+                  <span className="game-price">{game.price} CLP</span>
                   {game.originalPrice && game.originalPrice !== game.price && (
-                    <span className="game-original-price">{game.originalPrice}</span>
+                    <span className="game-original-price">{game.originalPrice} CLP</span>
                   )}
                   {game.discount && (
                     <span className="game-discount">-{game.discount}</span>

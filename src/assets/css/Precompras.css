@@ -1,11 +1,11 @@
-/* covers3D.css - Estilos para la sección de juegos destacados 2.5D */
+/* ===== ESTILOS PRINCIPALES DE PRECOMPRAS ===== */
 
-/* Sección Juegos Destacados 2.5D - SIN FONDO ESPECÍFICO */
 .featured-games-section {
-  /* REMOVER: background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%); */
   position: relative;
   overflow: hidden;
-  padding: 4rem 0; /* Aumentar padding para mejor espaciado */
+  padding: 4rem 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
 }
 
 .featured-games-section::before {
@@ -34,55 +34,62 @@
   margin-bottom: 3rem !important;
 }
 
-/* Tarjetas 2.5D - MEJORAR TRANSPARENCIA */
+/* ===== TARJETAS 2.5D - TAMAÑO FIJO PARA TODOS ===== */
 .game-card-3d {
   position: relative;
-  height: 450px;
+  height: 650px; /* ALTURA FIJA IGUAL PARA TODOS */
   cursor: pointer;
   transform-style: preserve-3d;
   z-index: 2;
+  perspective: 1000px;
+  width: 100%; /* ANCHO FIJO */
 }
 
 .game-card-inner {
   position: relative;
   width: 100%;
-  height: 100%;
-  background: rgba(15, 12, 41, 0.7); /* Fondo semitransparente que combine */
+  height: 100%; /* OCUPA EL 100% DEL CONTENEDOR PADRE */
+  background: rgba(15, 12, 41, 0.7);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  overflow: hidden;
+  overflow: hidden; /* IMPORTANTE: ocultar cualquier desbordamiento */
   border: 1px solid rgba(255, 0, 128, 0.3);
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.4),
     0 0 25px rgba(var(--rgb-primary), 0.2);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateZ(0);
 }
 
 .game-card-3d:hover .game-card-inner {
-  transform: translateY(-10px);
-  background: rgba(15, 12, 41, 0.8);
+  transform: translateY(-15px) translateZ(20px);
+  background: rgba(15, 12, 41, 0.85);
   box-shadow: 
     0 25px 50px rgba(0, 0, 0, 0.5),
     0 0 35px rgba(var(--rgb-primary), 0.3),
-    0 0 50px rgba(var(--rgb-secondary), 0.2);
+    0 0 50px rgba(var(--rgb-secondary), 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Imagen del juego */
+/* Imagen del juego - ALTURA FIJA */
 .game-image-container {
   position: relative;
-  height: 280px;
+  height: 300px; /* ALTURA FIJA IGUAL PARA TODOS */
   overflow: hidden;
+  flex-shrink: 0; /* NO PERMITIR QUE SE REDUZCA */
 }
 
 .game-cover-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  object-fit: cover; /* MANTENER PROPORCIONES */
+  transition: all 0.4s ease;
+  filter: brightness(0.9);
 }
 
 .game-card-3d:hover .game-cover-image {
-  transform: scale(1.05);
+  transform: scale(1.08);
+  filter: brightness(1);
 }
 
 .game-overlay {
@@ -94,8 +101,10 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
+    rgba(15, 12, 41, 0.1) 50%,
     rgba(15, 12, 41, 0.9) 100%
   );
+  z-index: 1;
 }
 
 /* Badge de descuento */
@@ -112,33 +121,74 @@
   box-shadow: 0 5px 15px rgba(var(--rgb-primary), 0.4);
   z-index: 3;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
-/* Contenido de la tarjeta */
+/* Contenido de la tarjeta - DISTRIBUCIÓN ESTRICTA */
 .game-card-content {
   position: relative;
-  padding: 20px;
+  padding: 25px;
   z-index: 2;
+  height: 350px; /* ALTURA FIJA: 650px total - 300px imagen = 350px */
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* ESPACIO CONSISTENTE */
 }
 
+/* TÍTULO - ALTURA FIJA */
 .game-title {
   color: white;
   font-size: 1.4rem;
   font-weight: 700;
-  margin-bottom: 10px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  line-height: 1.3;
+  margin: 0;
+  flex-shrink: 0;
+  height: 3.5em; /* ALTURA FIJA para 2-3 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* MÁXIMO 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* PLATAFORMAS - ALTURA FIJA */
+.game-platforms {
+  margin: 0;
+  flex-shrink: 0;
+  height: 1.5em; /* ALTURA FIJA */
+}
+
+.game-platforms small {
+  font-size: 0.9rem;
+}
+
+/* DESCRIPCIÓN - ALTURA FIJA */
+.game-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  flex-shrink: 0;
+  height: 4.5em; /* ALTURA FIJA para exactamente 3 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* MÁXIMO 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* PRECIOS - ALTURA FIJA */
 .game-price-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
+  margin: 0;
+  flex-shrink: 0;
+  height: 2em; /* ALTURA FIJA */
 }
 
 .current-price {
   color: #ffff00;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
   text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
 }
@@ -146,22 +196,30 @@
 .original-price {
   color: #ff6b6b;
   text-decoration: line-through;
-  font-size: 1rem;
+  font-size: 1.1rem;
   opacity: 0.8;
 }
 
-/* Botón Comprar */
+/* BOTÓN - POSICIÓN FIJA EN LA PARTE INFERIOR */
 .buy-now-btn {
   background: linear-gradient(45deg, rgba(var(--rgb-primary), 0.9), rgba(var(--rgb-secondary), 0.9));
   border: none;
   color: white;
-  padding: 10px 25px;
+  padding: 18px 25px;
   border-radius: 25px;
   font-weight: 600;
   width: 100%;
   transition: all 0.3s ease;
   box-shadow: 0 5px 15px rgba(var(--rgb-primary), 0.3);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: auto; /* SIEMPRE EN LA PARTE INFERIOR */
+  font-size: 1.1rem;
+  height: 60px; /* ALTURA FIJA */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .buy-now-btn:hover {
@@ -170,6 +228,66 @@
     0 8px 25px rgba(var(--rgb-primary), 0.5),
     0 0 20px rgba(var(--rgb-secondary), 0.3);
   color: white;
+}
+
+.buy-now-btn.processing {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* BENEFICIOS - ALTURA FIJA */
+.preorder-benefits {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+  margin-top: 10px;
+  flex-shrink: 0;
+  height: 4em; /* ALTURA FIJA para 2 beneficios */
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  height: 1.5em; /* ALTURA FIJA por beneficio */
+}
+
+.benefit-item:last-child {
+  margin-bottom: 0;
+}
+
+.benefit-item small {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.benefit-item i {
+  font-size: 0.9rem;
+}
+
+/* Botón de precompra especial */
+.preorder-btn {
+  background: linear-gradient(45deg, rgba(var(--rgb-primary), 0.9), rgba(var(--rgb-accent, 255, 0, 128), 0.9)) !important;
+  position: relative;
+  overflow: hidden;
+  padding: 18px 25px !important;
+  font-size: 1.1rem !important;
+  height: 60px !important; /* ALTURA FIJA */
+}
+
+.preorder-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.preorder-btn:hover::before {
+  left: 100%;
 }
 
 /* Sombra 3D */
@@ -191,9 +309,10 @@
   bottom: -25px;
   filter: blur(20px);
   background: rgba(var(--rgb-primary), 0.3);
+  transform: rotateX(80deg) scale(1.1);
 }
 
-/* Sistema de 3 columnas */
+/* Sistema de 3 columnas - FORZAR TAMAÑOS IGUALES */
 .featured-games-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -203,10 +322,378 @@
   padding: 0 1rem;
   position: relative;
   z-index: 2;
+  align-items: start; /* ALINEAR TODAS LAS TARJETAS EN LA PARTE SUPERIOR */
 }
 
 .featured-game-item {
   display: flex;
   justify-content: center;
+  height: 650px; /* FORZAR ALTURA IGUAL EN EL CONTENEDOR */
 }
 
+/* ===== ESTILOS ESPECÍFICOS PARA PRECOMPRAS ===== */
+
+/* Badge de fecha de lanzamiento */
+.release-date-badge {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+/* Sección de información de precompras */
+.preorder-info-section {
+  position: relative;
+  z-index: 2;
+}
+
+.preorder-info-card {
+  background: rgba(15, 12, 41, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 0, 128, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(var(--rgb-primary), 0.1);
+}
+
+.preorder-info-card h4 {
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.benefit-icon {
+  font-size: 2.5rem;
+  color: rgba(var(--rgb-primary), 0.8);
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.benefit-icon i {
+  filter: drop-shadow(0 0 10px rgba(var(--rgb-primary), 0.5));
+  transition: all 0.3s ease;
+}
+
+.benefit-icon:hover i {
+  transform: scale(1.1);
+  color: rgba(var(--rgb-primary), 1);
+}
+
+/* Spinner de carga */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: white;
+  min-height: 50vh;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid rgba(var(--rgb-primary), 0.8);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+.spinner-small {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== PARTÍCULAS DE FONDO ===== */
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(var(--rgb-primary), 0.15);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg) scale(1); 
+    opacity: 0.4;
+  }
+  50% { 
+    transform: translateY(-25px) rotate(180deg) scale(1.1); 
+    opacity: 0.8;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .featured-games-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .game-card-3d,
+  .featured-game-item {
+    height: 620px; /* MANTENER LA MISMA ALTURA PARA TODOS */
+  }
+  
+  .game-image-container {
+    height: 280px; /* MANTENER PROPORCIÓN */
+  }
+  
+  .game-card-content {
+    height: 340px; /* AJUSTAR: 620px - 280px = 340px */
+  }
+  
+  .buy-now-btn,
+  .preorder-btn {
+    height: 56px; /* AJUSTAR PROPORCIONALMENTE */
+    padding: 16px 20px;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-games-section {
+    padding: 2rem 0;
+  }
+  
+  .featured-title {
+    font-size: 2rem;
+    margin-bottom: 2rem !important;
+  }
+  
+  .featured-games-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .game-card-3d,
+  .featured-game-item {
+    height: 600px; /* MANTENER LA MISMA ALTURA PARA TODOS */
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .game-image-container {
+    height: 260px;
+  }
+  
+  .game-card-content {
+    height: 340px; /* 600px - 260px = 340px */
+    padding: 20px;
+    gap: 10px;
+  }
+  
+  .preorder-info-card {
+    padding: 1.5rem;
+    margin: 0 0.5rem;
+  }
+  
+  .buy-now-btn,
+  .preorder-btn {
+    height: 54px;
+    padding: 16px 20px;
+    font-size: 1rem;
+  }
+  
+  .game-title {
+    font-size: 1.3rem;
+    height: 3.2em;
+  }
+  
+  .game-description {
+    font-size: 0.9rem;
+    height: 4em;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-title {
+    font-size: 1.8rem;
+  }
+  
+  .game-card-3d,
+  .featured-game-item {
+    height: 580px; /* MANTENER LA MISMA ALTURA PARA TODOS */
+  }
+  
+  .game-image-container {
+    height: 240px;
+  }
+  
+  .game-card-content {
+    height: 340px; /* 580px - 240px = 340px */
+    padding: 18px;
+    gap: 8px;
+  }
+  
+  .game-title {
+    font-size: 1.2rem;
+    height: 3em;
+  }
+  
+  .current-price {
+    font-size: 1.2rem;
+  }
+  
+  .buy-now-btn,
+  .preorder-btn {
+    height: 52px;
+    padding: 15px 15px;
+    font-size: 0.95rem;
+  }
+  
+  .game-description {
+    font-size: 0.85rem;
+    height: 3.5em;
+  }
+}
+
+/* ===== MEJORAS DE ACCESIBILIDAD ===== */
+@media (prefers-reduced-motion: reduce) {
+  .game-card-inner,
+  .buy-now-btn,
+  .game-cover-image,
+  .particle,
+  .spinner {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Focus states para accesibilidad */
+.buy-now-btn:focus {
+  outline: 2px solid rgba(var(--rgb-primary), 0.8);
+  outline-offset: 2px;
+}
+
+.game-card-3d:focus-within .game-card-inner {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 35px rgba(var(--rgb-primary), 0.3);
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .game-card-inner {
+    border: 2px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .game-discount-badge,
+  .release-date-badge {
+    border: 2px solid white;
+  }
+}
+
+/* ===== ESTILOS PARA EL HOME ===== */
+
+/* Estilos para el banner de precompras en el Home */
+.precompra-banner-home {
+  background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+  transition: all 0.3s ease;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+}
+
+.precompra-banner-home:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
+  border-color: rgba(255, 107, 53, 0.5);
+}
+
+.hero-actions .btn {
+  padding: 12px 30px;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.hero-actions .btn-warning {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  border: none;
+  color: white;
+}
+
+.hero-actions .btn-warning:hover {
+  background: linear-gradient(45deg, #e55a2b, #e0851a);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+}
+
+/* Deshabilitar botones de precompra en el Home */
+.buy-now-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Responsive para elementos del Home */
+@media (max-width: 768px) {
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .hero-actions .btn {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .precompra-banner-home {
+    margin: 1rem 10px;
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+}
+
+/* Asegurar que el contenido no se desborde */
+.game-card-inner {
+  overflow: hidden;
+}
+
+/* Mejorar la legibilidad del texto en botones */
+.buy-now-btn, .preorder-btn {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Estados de hover mejorados */
+.buy-now-btn:hover, .preorder-btn:hover {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}

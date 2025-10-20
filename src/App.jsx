@@ -10,6 +10,8 @@ import Piedepagina from "./components/Piedepagina";
 import Register from "./pages/Register";
 import { Link } from "react-router-dom";
 import PanelAdmin from "./components/PanelAdmin";
+import Checkout from './pages/Checkout';
+import Precompras from './pages/Precompras'; // AGREGAR ESTA IMPORTACIÓN
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
               <MiniCatalogo />
               <div className="mb-3">
                 <Link to="/admin" className="btn btn-primary">Ir al Panel Admin</Link>
+                <Link to="/precompras" className="btn btn-warning ms-2">Ver Precompras</Link> {/* ✅ AGREGAR BOTÓN */}
               </div>
             </>
           } />
@@ -32,6 +35,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<PanelAdmin />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/precompras" element={<Precompras />} /> {/* ✅ AGREGAR ESTA RUTA */}
         </Routes>
       </main>
       <Piedepagina />

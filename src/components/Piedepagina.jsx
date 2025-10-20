@@ -25,7 +25,7 @@ function Footer() {
                 <Link to="/register" className="footer-link">Registro</Link>
               </li>
               <li className="list-inline-item mx-2">
-                <Link to="/login" className="footer-link">Login</Link>
+                <Link to="/login" className="footer-link">Iniciar Sesion</Link>
               </li>
             </motion.ul>
 
