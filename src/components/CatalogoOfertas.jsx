@@ -5,7 +5,7 @@ import cyberpunk from '../assets/images/Cyberpunk-2077.jpg';
 import eldenring from '../assets/images/EldenRin.jpg';
 import minecraft from '../assets/images/maicra.jpg';
 import gow from '../assets/images/god-war-ragnarok-2872129.webp';
-import fornai from '../assets/images/fornai.jpg';
+import re4gold from '../assets/images/re4gold.webp';
 import '../assets/css/ofertas.css';
 import { useInView } from 'react-intersection-observer';
 import '../assets/css/ComponenteAnimado.css';
@@ -60,11 +60,11 @@ const GameTicker = () => {
     },
     { 
       id: 6, 
-      name: 'Fortnite', 
-      price: 'Gratis', 
-      originalPrice: '',
-      discount: '',
-      image: fornai
+      name: 'Resident evil 4 Remake', 
+      price: '$12.99', 
+      originalPrice: '$22.99',
+      discount: '20%',
+      image: re4gold
     }
   ];
 
