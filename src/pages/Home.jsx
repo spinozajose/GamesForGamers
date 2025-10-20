@@ -30,7 +30,7 @@ function Home() {
       id: 1,
       title: "Grand Theft Auto VI",
       image:
-        "https://imagenes.elpais.com/resizer/v2/XOC4Q6EPWECJADRXQLJIXU5PNE.jpg?auth=ee24d91053a568132991fa4bd996180e6a2d47a05155287955e67f00ae49d046&width=1000",
+        "src/assets/images/gta6.jpg",
       price: "$74.990",
       originalPrice: "$84.990",
       discount: "12%",
@@ -40,7 +40,7 @@ function Home() {
       id: 2,
       title: "Resident Evil Requiem",
       image:
-        "https://i.3djuegos.com/juegos/20054/subnautica_2/fotos/ficha/subnautica_2-5929425.webp",
+        "src/assets/images/requiem.jpeg",
       price: "$59.990",
       originalPrice: "$69.990",
       discount: "14%",
@@ -50,7 +50,7 @@ function Home() {
       id: 3,
       title: "The Duskbloods",
       image:
-        "https://image.api.playstation.com/vulcan/ap/rnd/202506/0700/3f30b1b8ee413768bb08940e8f848cf88b430aa6622a8873.png",
+        "src/assets/images/duskblood.jpeg",
       price: "$64.990",
       originalPrice: "$74.990",
       discount: "13%",
