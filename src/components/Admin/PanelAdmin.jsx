@@ -1,6 +1,6 @@
 import React from 'react';
-import '../assets/css/PanelAdmin.css';
-
+import '../../assets/css/PanelAdmin.css';
+import { Link } from 'react-router-dom';
 
 function PanelAdmin() {
   return (
@@ -43,40 +43,40 @@ function PanelAdmin() {
           <div className="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
             <ul className="nav flex-column">
               <li className="nav-item mx-2">
-                <a href="/admin/index.html" className="nav-link nav-menu d-flex gap-2 nav-active">
-                  <i className="bi bi-house-fill" />
-                  Dashboard
-                </a>
+                <Link to="/admin" className="nav-link nav-menu d-flex gap-2 nav-active">
++                  <i className="bi bi-house-fill" />
++                  Dashboard
++                </Link>
               </li>
               <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/ordenes/index.html">
+                <Link className="nav-link nav-menu d-flex gap-2" to="/admin/ordenes">
                   <i className="bi bi-file-earmark" />
                   Ordenes
-                </a>
+                </Link>
               </li>
               <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/producto/index.html">
+                <Link className="nav-link nav-menu d-flex gap-2" to="/admin/Productos">
                   <i className="bi bi-cart" />
                   Productos
-                </a>
+                </Link>
               </li>
               <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/categoria/index.html">
+                <Link className="nav-link nav-menu d-flex gap-2" to="/admin/Categorias">
                   <i className="bi bi-list-ul" />
                   Categorías
-                </a>
+                </Link>
               </li>
               <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/usuario/index.html">
+                <Link className="nav-link nav-menu d-flex gap-2" to="/admin/Usuarios">
                   <i className="bi bi-people" />
                   Usuarios
-                </a>
+                </Link>
               </li>
               <li className="nav-item mx-2">
-                <a className="nav-link nav-menu d-flex gap-2" href="/admin/reporte/index.html">
+                <Link className="nav-link nav-menu d-flex gap-2" to="/admin/Reportes">
                   <i className="bi bi-graph-up" />
                   Reportes
-                </a>
+                </Link>
               </li>
             </ul>
             <hr className="my-3" />
