@@ -1,0 +1,186 @@
+/* ===== PÁGINA DE REGISTRO ===== */
+
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+    padding-bottom: 4rem;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 900px; /* Más ancho que el login */
+    padding: 0 1.5rem;
+}
+
+.register-card {
+    background: rgba(15, 12, 41, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.register-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, rgb(var(--rgb-secondary)), rgb(var(--rgb-primary)));
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.register-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: white;
+    text-transform: uppercase;
+}
+
+.register-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Layout del Formulario --- */
+.form-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: rgb(var(--rgb-secondary));
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Inputs --- */
+.form-group-neon {
+    margin-bottom: 1.2rem;
+}
+
+.form-group-neon label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.form-group-neon input,
+.form-group-neon select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-group-neon input:focus,
+.form-group-neon select:focus {
+    border-color: rgb(var(--rgb-secondary));
+    box-shadow: 0 0 10px rgba(var(--rgb-secondary), 0.2);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Fila de 2 columnas interna */
+.row-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* --- Estilos de Error (Heredados del concepto anterior) --- */
+.input-error {
+    border-color: #ff4444 !important;
+    background: rgba(255, 0, 0, 0.05) !important;
+}
+
+.error-msg {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    display: block;
+}
+
+/* --- Footer del Formulario --- */
+.form-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+}
+
+.checkbox-neon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-register {
+    width: 100%;
+    max-width: 300px;
+    padding: 14px;
+    background: linear-gradient(45deg, rgb(var(--rgb-secondary)), rgb(var(--rgb-primary)));
+    border: none;
+    border-radius: 10px;
+    color: black;
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: transform 0.2s;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(var(--rgb-secondary), 0.4);
+}
+
+.register-footer-link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.login-link {
+    color: rgb(var(--rgb-primary));
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

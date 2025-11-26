@@ -1,61 +1,63 @@
 import "./index.css";
 import { Routes, Route } from "react-router-dom";
-import Encabezado from "./components/Encabezado"
-import Home from "./pages/Home";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
-import MiniCatalogo from "./components/MiniCatalogo";
-import ProgresoScroll from "./components/ProgresoScroll";
-import Piedepagina from "./components/Piedepagina";
-import Register from "./pages/Register";
-import { Link } from "react-router-dom";
+
+// Layout
+import Encabezado from "./components/layouts/Header/Encabezado";
+import Piedepagina from "./components/layouts/Footer/Piedepagina";
+
+// Páginas
+import Inicio from "./pages/Home/Inicio";
+import Contacto from "./pages/Contact/Contacto";
+import InicioSesion from "./pages/Login/InicioSesion";
+import Registro from "./pages/Register/Registro";
+import VerificarCompra from "./pages/Checkout/VerificarCompra";
+import Precompras from "./pages/Catalog/CatalogoPrecompras";
+import Catalogo from "./pages/Catalog/Catalogo"; 
+import CatalogoOfertas from "./pages/Catalog/CatalogoOfertas";
+
+// Admin
 import PanelAdmin from "./components/Admin/PanelAdmin";
-import Checkout from './pages/Checkout';
-import Precompras from './pages/Precompras'; // AGREGAR ESTA IMPORTACIÓN
-import Ordenes from './components/Admin/ordenes'; 
-import Boletas from './components/Admin/Boletas';
-import Productos from './components/Admin/Productos';
-import Categorias from './components/Admin/Categorias';
-import Usuarios from './components/Admin/Usuarios';
-import Reportes from './components/Admin/Reportes';
-import NuevoProducto from './components/Admin/NuevoProducto';
-import NuevaCategoria from './components/Admin/NuevaCategoria';
+import Ordenes from "./components/Admin/ordenes";
+import Boletas from "./components/Admin/Boletas";
+import Productos from "./components/Admin/Productos";
+import Categorias from "./components/Admin/Categorias";
+import Usuarios from "./components/Admin/Usuarios";
+import Reportes from "./components/Admin/Reportes";
+import NuevoProducto from "./components/Admin/NuevoProducto";
+import NuevaCategoria from "./components/Admin/NuevaCategoria";
 
 function App() {
   return (
-    <div className="d-flex flex-column min-vh-100">
-      <ProgresoScroll />
+    <div className="app">
       <Encabezado />
-      <main className="flex-grow-1 container my-4">
 
+      <main className="main-content">
         <Routes>
-          <Route path="/" element={
-            <>
-              <Home />
-              <MiniCatalogo />
-              <div className="mb-3">
-                <Link to="/admin" className="btn btn-primary">Ir al Panel Admin</Link>
-                
-                <Link to="/precompras" className="btn btn-warning ms-2">Ver Precompras</Link> {/* ✅ AGREGAR BOTÓN */}
-              </div>
-            </>
-          } />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Página principal */}
+          <Route path="/" element={<Inicio />} />
+
+          {/* Rutas públicas principales */}
+          <Route path="/catalogo" element={<Catalogo />} /> {/* <--- NUEVA RUTA AÑADIDA */}
+          <Route path="/ofertas" element={<CatalogoOfertas />} />
+          <Route path="/precompras" element={<Precompras />} />
+          <Route path="/contact" element={<Contacto />} />
+          <Route path="/login" element={<InicioSesion />} />
+          <Route path="/register" element={<Registro />} />
+          <Route path="/checkout" element={<VerificarCompra />} />
+
+          {/* Rutas admin */}
           <Route path="/admin" element={<PanelAdmin />} />
           <Route path="/admin/productos" element={<Productos />} />
           <Route path="/admin/categorias" element={<Categorias />} />
           <Route path="/admin/ordenes" element={<Ordenes />} />
-          <Route path= "/admin/usuarios" element= {<Usuarios />} />
+          <Route path="/admin/usuarios" element={<Usuarios />} />
           <Route path="/admin/reportes" element={<Reportes />} />
           <Route path="/admin/productos/nuevoproducto" element={<NuevoProducto />} />
           <Route path="/admin/categorias/nuevacategoria" element={<NuevaCategoria />} />
           <Route path="/admin/ordenes/:id" element={<Boletas />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/precompras" element={<Precompras />} /> {/* ✅ AGREGAR ESTA RUTA */}
         </Routes>
       </main>
+
       <Piedepagina />
     </div>
   );

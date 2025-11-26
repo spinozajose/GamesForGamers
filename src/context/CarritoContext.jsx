@@ -17,7 +17,12 @@ export const CarritoProvider = ({ children }) => {
   useEffect(() => {
     const carritoGuardado = localStorage.getItem('carritoGames');
     if (carritoGuardado) {
-      setCarrito(JSON.parse(carritoGuardado));
+      try {
+        setCarrito(JSON.parse(carritoGuardado));
+      } catch (error) {
+        console.error("Error al cargar el carrito:", error);
+        localStorage.removeItem('carritoGames');
+      }
     }
   }, []);
 
@@ -26,15 +31,19 @@ export const CarritoProvider = ({ children }) => {
     localStorage.setItem('carritoGames', JSON.stringify(carrito));
   }, [carrito]);
 
-  // Función para extraer precio numérico de strings como "$7.990"
-  const extraerPrecioNumerico = (precioString) => {
-    if (typeof precioString === 'number') return precioString;
-    
-    const numero = precioString.replace(/[^0-9]/g, '');
+  // Función robusta para asegurar que siempre trabajamos con números
+  const extraerPrecioNumerico = (precio) => {
+    if (!precio) return 0;
+    if (typeof precio === 'number') return precio;
+    // Si es string "$10.000", quita todo lo que no sea número
+    const numero = precio.toString().replace(/[^0-9]/g, '');
     return parseInt(numero) || 0;
   };
 
   const agregarAlCarrito = (juego, cantidad = 1) => {
+    // Aseguramos el precio unitario desde el principio usando la propiedad 'price'
+    const precioUnitario = extraerPrecioNumerico(juego.price);
+
     setCarrito(prevCarrito => {
       const juegoExistente = prevCarrito.find(item => item.id === juego.id);
       
@@ -45,17 +54,21 @@ export const CarritoProvider = ({ children }) => {
             ? { 
                 ...item, 
                 cantidad: item.cantidad + cantidad,
-                precioTotal: extraerPrecioNumerico(juego.originalPrice) * (item.cantidad + cantidad)
+                // Usamos el precio unitario que ya teníamos guardado o el nuevo
+                precioTotal: item.precioNumerico * (item.cantidad + cantidad)
               }
             : item
         );
       } else {
         // Agregar nuevo juego al carrito
         const nuevoJuego = {
-          ...juego,
+          id: juego.id,
+          name: juego.name,
+          image: juego.image,
+          price: juego.price, // Guardamos el precio original por si acaso
           cantidad: cantidad,
-          precioNumerico: extraerPrecioNumerico(juego.originalPrice),
-          precioTotal: extraerPrecioNumerico(juego.originalPrice) * cantidad
+          precioNumerico: precioUnitario, // Precio limpio numérico
+          precioTotal: precioUnitario * cantidad
         };
         return [...prevCarrito, nuevoJuego];
       }

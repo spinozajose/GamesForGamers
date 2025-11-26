@@ -1,0 +1,318 @@
+/* ===== DISEÑO DEL CARRITO DESPLEGABLE ===== */
+
+/* Contenedor Principal Flotante */
+.cart-dropdown {
+    position: fixed;
+    top: 70px; /* Justo debajo del header */
+    right: 2rem; /* Alineado con el margen del container */
+    width: 380px;
+    max-width: 90vw;
+    background: rgba(15, 12, 41, 0.98); /* Fondo muy oscuro */
+    backdrop-filter: blur(15px); /* Efecto vidrio */
+    border: 1px solid rgba(var(--rgb-primary), 0.3);
+    border-radius: 12px;
+    z-index: 1001;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Animación de entrada simple */
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Encabezado del Carrito --- */
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.cart-header h5 {
+    margin: 0;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.close-cart:hover {
+    color: #ff4444;
+}
+
+/* --- Lista de Items --- */
+.cart-items {
+    max-height: 450px; /* Altura máxima antes de hacer scroll */
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+/* Scrollbar personalizado para Chrome/Safari/Edge */
+.cart-items::-webkit-scrollbar {
+    width: 6px;
+}
+.cart-items::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+.cart-items::-webkit-scrollbar-thumb {
+    background: rgba(var(--rgb-primary), 0.3);
+    border-radius: 3px;
+}
+
+/* Estado Vacío */
+.empty-cart {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.empty-cart p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-continue {
+    display: inline-block;
+    color: rgb(var(--rgb-primary));
+    border: 1px solid rgb(var(--rgb-primary));
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-continue:hover {
+    background: rgba(var(--rgb-primary), 0.1);
+    color: white;
+}
+
+/* --- Item Individual --- */
+.cart-item {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.item-image {
+    width: 70px;
+    height: 95px; /* Proporción vertical para juegos */
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.item-details h6 {
+    margin: 0 0 0.3rem 0;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.item-price {
+    color: #ffff00; /* Amarillo neón */
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Controles de Cantidad (+ 1 -) */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quantity-btn {
+    background: none;
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.quantity-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.quantity-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.quantity {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    align-self: flex-start;
+    transition: color 0.2s;
+}
+
+.remove-btn:hover {
+    color: #ff4444;
+}
+
+/* --- Footer del Carrito (Total y Botones) --- */
+.cart-footer {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.cart-total strong {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.cart-total strong:last-child {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #ffff00;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.2);
+}
+
+.cart-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.cart-actions button,
+.cart-actions a {
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* Botón Secundario (Seguir comprando) */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Botón Primario (Comprar) */
+.btn-primary {
+    background: rgb(var(--rgb-primary));
+    color: white;
+    box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.3);
+}
+
+.btn-primary:hover {
+    background: rgba(var(--rgb-primary), 0.8);
+    transform: translateY(-2px);
+}
+
+/* --- Overlay de Fondo (Oscurece la web) --- */
+.cart-overlay {
+    position: fixed;
+    top: 70px; /* Debajo del header */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 70px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* --- Responsive para Móviles --- */
+@media (max-width: 480px) {
+    .cart-dropdown {
+        width: 100%;
+        height: calc(100vh - 70px); /* Pantalla completa menos header */
+        top: 70px;
+        right: 0;
+        border-radius: 0;
+        border: none;
+        max-width: none;
+    }
+
+    .cart-items {
+        flex: 1; /* Ocupa todo el espacio disponible */
+        max-height: none;
+    }
+}

@@ -1,0 +1,238 @@
+/* ===== ESTILOS DE AUTENTICACIÓN (LOGIN) ===== */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px; /* Compensar header fijo */
+    padding-bottom: 2rem;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 0 1.5rem;
+}
+
+.auth-card {
+    background: rgba(15, 12, 41, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto borde brillante superior */
+.auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgb(var(--rgb-primary)), transparent);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+/* --- Inputs Neón --- */
+.form-group-neon {
+    margin-bottom: 1.5rem;
+}
+
+.form-group-neon label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 1;
+}
+
+.form-group-neon input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 12px 12px 45px; /* Espacio para el icono */
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-group-neon input:focus {
+    border-color: rgb(var(--rgb-primary));
+    box-shadow: 0 0 15px rgba(var(--rgb-primary), 0.2);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* --- Opciones --- */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: rgb(var(--rgb-secondary));
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* --- Botón Principal --- */
+.btn-auth {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(45deg, rgb(var(--rgb-primary)), #ff0055);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(var(--rgb-primary), 0.4);
+}
+
+/* --- Footer --- */
+.auth-footer {
+    margin-top: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+}
+
+.auth-footer p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.register-link {
+    color: rgb(var(--rgb-secondary));
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px rgb(var(--rgb-secondary));
+}
+
+/* ... (Estilos anteriores se mantienen) ... */
+
+/* --- Estilos de Error --- */
+
+.input-error {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.2) !important;
+    background: rgba(255, 0, 0, 0.05) !important;
+}
+
+.error-msg {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: block;
+    padding-left: 5px;
+    animation: slideIn 0.2s ease-out;
+}
+
+/* Alerta General (Credenciales Incorrectas) */
+.alert-error {
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid #ff4444;
+    color: #ffaaaa;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    animation: shake 0.4s ease-in-out;
+}
+
+/* --- Spinner de carga para el botón --- */
+.spinner-small {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}

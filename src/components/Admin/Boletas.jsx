@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/css/PanelAdmin.css';
+import "./PanelAdmin.css";
 import { Link, useParams } from 'react-router-dom';
 
 function Boletas() {

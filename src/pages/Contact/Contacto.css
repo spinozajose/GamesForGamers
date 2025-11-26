@@ -1,0 +1,276 @@
+/* ===== PÁGINA DE CONTACTO ===== */
+
+.contacto-page {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 100px; /* Espacio para header fijo */
+    padding-bottom: 4rem;
+}
+
+.contacto-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* --- Cabecera --- */
+.contacto-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contacto-title {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, rgb(var(--rgb-secondary)), rgb(var(--rgb-primary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.contacto-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Grid Principal --- */
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Columna formulario más ancha */
+    gap: 3rem;
+    align-items: start;
+}
+
+/* --- Columna Izquierda: Información --- */
+.info-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: rgba(15, 12, 41, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    transition: none; /* Estático */
+}
+
+.info-card:hover {
+    border-color: rgba(var(--rgb-secondary), 0.5);
+    background: rgba(15, 12, 41, 0.8);
+}
+
+.info-icon {
+    font-size: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.info-text h3 {
+    margin: 0 0 0.5rem 0;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.info-text p {
+    margin: 0 0 0.5rem 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.info-data {
+    color: rgb(var(--rgb-secondary));
+    font-weight: 600;
+}
+
+.link-neon {
+    color: rgb(var(--rgb-primary));
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.link-neon:hover {
+    text-decoration: underline;
+}
+
+/* --- FAQ Section --- */
+.faq-preview {
+    margin-top: 1rem;
+}
+
+.faq-preview h3 {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.faq-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.faq-list li {
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+details summary {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.8rem 0;
+    font-weight: 500;
+    list-style: none; /* Quita el triángulo por defecto en algunos navegadores */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details summary::after {
+    content: '+';
+    color: rgb(var(--rgb-secondary));
+    font-weight: bold;
+}
+
+details[open] summary::after {
+    content: '-';
+}
+
+details p {
+    color: rgba(255, 255, 255, 0.6);
+    padding-bottom: 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* --- Columna Derecha: Formulario --- */
+.contact-form-wrapper {
+    background: rgba(15, 12, 41, 0.8);
+    border: 1px solid rgba(var(--rgb-primary), 0.3);
+    border-radius: 16px;
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.contact-form-wrapper h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    resize: vertical; /* Para textarea */
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: rgb(var(--rgb-primary));
+    box-shadow: 0 0 8px rgba(var(--rgb-primary), 0.2);
+}
+
+.btn-enviar {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(90deg, rgb(var(--rgb-secondary)), rgb(var(--rgb-primary)));
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+}
+
+.btn-enviar:hover {
+    opacity: 0.9;
+}
+
+.btn-enviar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.check-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.mensaje-exito h3 {
+    color: #00ff88;
+    margin-bottom: 0.5rem;
+}
+
+.mensaje-exito p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .contacto-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-form-wrapper {
+        padding: 1.5rem;
+    }
+}

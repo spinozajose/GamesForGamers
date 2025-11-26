@@ -1,0 +1,259 @@
+/* ===== PÁGINA DE PRECOMPRAS ===== */
+
+.precompras-page {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 4rem;
+}
+
+.precompras-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* --- Hero Section --- */
+.precompras-hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, rgba(15, 12, 41, 0.9), rgba(20, 40, 80, 0.9));
+    border: 1px solid rgba(0, 242, 255, 0.3); /* Cyan border */
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.precompras-title {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    /* Gradiente Cyan/Violeta */
+    background: linear-gradient(45deg, #00f2ff, #bc13fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.precompras-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Controles --- */
+.precompras-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.2rem;
+    border-radius: 12px;
+    border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+}
+
+.search-box-pre {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+}
+
+.search-box-pre .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 242, 255, 0.6);
+}
+
+.search-box-pre input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px 10px 10px 35px;
+    color: white;
+    outline: none;
+    transition: none;
+}
+
+.search-box-pre input:focus {
+    border-color: #00f2ff; /* Foco Cyan */
+}
+
+.sort-box-pre {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.sort-box-pre select {
+    background: rgba(15, 12, 41, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #00f2ff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    font-weight: 500;
+}
+
+/* --- Grid de Precompras --- */
+.precompras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+}
+
+/* --- Card de Preorden --- */
+.preorder-card {
+    background: rgba(20, 20, 40, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: none;
+}
+
+.preorder-card:hover {
+    border-color: rgba(0, 242, 255, 0.6);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+/* Fecha Destacada */
+.date-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid #00f2ff;
+    color: #00f2ff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(4px);
+}
+
+.preorder-image {
+    width: 100%;
+    height: 380px; /* Carteles un poco más altos para ver arte */
+    position: relative;
+}
+
+.preorder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preorder-category {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(188, 19, 254, 0.8); /* Violeta */
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.preorder-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+}
+
+.preorder-title {
+    color: white;
+    font-size: 1.3rem;
+    margin: 0 0 1.5rem 0;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.preorder-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.price-value {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.btn-preorder {
+    background: transparent;
+    border: 1px solid #00f2ff;
+    color: #00f2ff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: none;
+}
+
+.btn-preorder:hover {
+    background: rgba(0, 242, 255, 0.15);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    text-shadow: 0 0 5px #00f2ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .precompras-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .preorder-image {
+        height: 280px;
+    }
+}

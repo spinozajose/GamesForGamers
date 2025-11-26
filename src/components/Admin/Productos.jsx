@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../assets/css/PanelAdmin.css';
+import "./PanelAdmin.css";
 
 function Productos() {
   return (
