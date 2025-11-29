@@ -72,6 +72,21 @@ function NuevoProducto() {
                             <option value="terror">Terror</option>
                         </select>
                     </div>
+                     <div className="col-md-6">
+                        <label htmlFor="plataforma" className="form-label">Plataforma <span className="text-danger">*</span></label>
+                        <select 
+                            className="form-select form-select-neon" 
+                            id="plataforma" 
+                            required
+                            onChange={(e) => setFormData({...formData, plataforma: e.target.value})}
+                        >
+                            <option value="" disabled selected>Seleccionar...</option>
+                            <option value="pc">PC</option>
+                            <option value="ps5">PlayStation 5</option>
+                            <option value="xbox">Xbox Series X</option>
+                            <option value="switch">Nintendo Switch</option>
+                        </select>
+                    </div>
                     <div className="col-12">
                         <label htmlFor="descripcion" className="form-label">Descripción</label>
                         <textarea 
