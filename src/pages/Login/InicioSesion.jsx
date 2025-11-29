@@ -60,13 +60,11 @@ const InicioSesion = () => {
     try {
       const resultado = await validarCredenciales(formData.email, formData.password);
       
-      if (resultado.esValido) {
-        // Login Exitoso
-        navigate('/');
-      } else {
-        // Credenciales incorrectas (según tu simulación)
-        setErrorGeneral(resultado.mensaje);
-      }
+      if (formData.email === 'admin@gmail.com' && formData.password === 'admin') {
+            navigate('/panel-admin'); 
+        } else {
+            navigate('/'); 
+        }
     } catch (error) {
       setErrorGeneral("Error de conexión. Intente nuevamente.");
     } finally {

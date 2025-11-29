@@ -46,15 +46,15 @@ function App() {
           <Route path="/checkout" element={<VerificarCompra />} />
 
           {/* Rutas admin */}
-          <Route path="/admin" element={<PanelAdmin />} />
-          <Route path="/admin/productos" element={<Productos />} />
-          <Route path="/admin/categorias" element={<Categorias />} />
-          <Route path="/admin/ordenes" element={<Ordenes />} />
-          <Route path="/admin/usuarios" element={<Usuarios />} />
-          <Route path="/admin/reportes" element={<Reportes />} />
-          <Route path="/admin/productos/nuevoproducto" element={<NuevoProducto />} />
-          <Route path="/admin/categorias/nuevacategoria" element={<NuevaCategoria />} />
-          <Route path="/admin/ordenes/:id" element={<Boletas />} />
+          <Route path="/panel-admin" element={<PanelAdmin />} />
+          <Route path="/panel-admin/productos" element={<Productos />} />
+          <Route path="/panel-admin/categorias" element={<Categorias />} />
+          <Route path="/panel-admin/ordenes" element={<Ordenes />} />
+          <Route path="/panel-admin/usuarios" element={<Usuarios />} />
+          <Route path="/panel-admin/reportes" element={<Reportes />} />
+          <Route path="/panel-admin/productos/nuevoproducto" element={<NuevoProducto />} />
+          <Route path="/panel-admin/categorias/nuevacategoria" element={<NuevaCategoria />} />
+          <Route path="/panel-admin/ordenes/:id" element={<Boletas />} />
         </Routes>
       </main>
 
