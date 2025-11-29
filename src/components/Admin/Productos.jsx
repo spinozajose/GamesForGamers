@@ -23,7 +23,7 @@ function Productos() {
       <main className="main-content-admin">
         <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="text-white">Inventario de Productos</h2>
-            <Link to="/admin/productos/nuevo" className="btn btn-success">
+            <Link to="/panel-admin/productos/nuevoProducto" className="btn btn-success">
                 <i className="bi bi-plus-lg me-2"></i>Nuevo Producto
             </Link>
         </div>

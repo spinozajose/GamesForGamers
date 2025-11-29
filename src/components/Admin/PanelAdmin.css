@@ -204,3 +204,30 @@ canvas {
     background: rgba(0,0,0,0.2); 
     border-radius: 8px;
 }
+
+/* --- FORMULARIOS NEÓN --- */
+.form-control-neon, .form-select-neon {
+  background-color: rgba(11, 12, 16, 0.6) !important; /* Fondo oscuro semi-transparente */
+  border: 1px solid var(--neon-blue) !important;
+  color: white !important;
+  backdrop-filter: blur(5px);
+}
+
+.form-control-neon:focus, .form-select-neon:focus {
+  background-color: rgba(11, 12, 16, 0.9) !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 15px rgba(102, 252, 241, 0.3) !important; /* Resplandor al escribir */
+  color: white !important;
+}
+
+/* Cambiar el color del texto placeholder */
+.form-control-neon::placeholder {
+  color: rgba(197, 198, 199, 0.5);
+}
+
+/* Estilo para etiquetas */
+.form-label {
+  color: var(--neon-cyan);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
