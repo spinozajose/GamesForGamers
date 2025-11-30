@@ -13,10 +13,10 @@ function Header() {
   
   // Estado para el usuario logueado
   const [usuario, setUsuario] = useState(null);
-  const location = useLocation(); // Detecta cambios de ruta (login/logout)
+  const location = useLocation(); 
   const navigate = useNavigate();
 
-  // Verificar sesión cada vez que cambiamos de página
+  // Verificar sesión cada vez que cambiamos de ruta
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
@@ -26,18 +26,15 @@ function Header() {
     }
   }, [location]);
 
-  // Cerrar carrito cuando se hace clic fuera
+  // Cerrar carrito al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showCart && !event.target.closest('.cart-dropdown') && !event.target.closest('.cart-icon')) {
         setShowCart(false);
       }
     };
-
     document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [showCart]);
 
   const toggleCart = () => setShowCart(!showCart);
@@ -61,6 +58,9 @@ function Header() {
 
   const formatearPrecio = (precio) => `$${precio.toLocaleString('es-CL')}`;
 
+  // Helper para verificar si es admin (compatible con distintos nombres de propiedad)
+  const esAdmin = usuario?.esAdmin || usuario?.permisosAdmin;
+
   return (
     <>
       <header className="header">
@@ -72,7 +72,7 @@ function Header() {
             GFG
           </Link>
           
-          {/* NAVEGACIÓN */}
+          {/* NAVEGACIÓN PRINCIPAL */}
           <nav className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
             <NavLink to="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               Inicio
@@ -86,6 +86,18 @@ function Header() {
             <NavLink to="/precompras" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               Precompras
             </NavLink>
+
+            {/* ENLACE ADMIN (Solo visible para administradores) */}
+            {esAdmin && (
+              <NavLink 
+                to="/panel-admin" 
+                className="nav-link admin-link-menu" 
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ color: '#00ff88', fontWeight: 'bold' }} // Estilo distintivo
+              >
+                 Panel de Administrador
+              </NavLink>
+            )}
           </nav>
 
           {/* ACCIONES */}
@@ -102,7 +114,7 @@ function Header() {
                 // MENÚ DE USUARIO LOGUEADO
                 <>
                   <NavLink to="/mis-compras" className="user-link" onClick={() => setMobileMenuOpen(false)}>
-                   Mis Compras
+                     Mis Compras
                   </NavLink>
                   <span className="separator">|</span>
                   <button 
@@ -165,29 +177,12 @@ function Header() {
                         <p className="item-price">{formatearPrecio(item.precioNumerico || 0)}</p>
                         
                         <div className="quantity-controls">
-                          <button 
-                            onClick={() => disminuirCantidad(item.id)} 
-                            className="quantity-btn" 
-                            disabled={item.cantidad <= 1}
-                          >
-                            -
-                          </button>
+                          <button onClick={() => disminuirCantidad(item.id)} className="quantity-btn" disabled={item.cantidad <= 1}>-</button>
                           <span className="quantity">{item.cantidad}</span>
-                          <button 
-                            onClick={() => aumentarCantidad(item.id)} 
-                            className="quantity-btn"
-                          >
-                            +
-                          </button>
+                          <button onClick={() => aumentarCantidad(item.id)} className="quantity-btn">+</button>
                         </div>
                       </div>
-                      <button 
-                        onClick={() => eliminarDelCarrito(item.id)} 
-                        className="remove-btn" 
-                        title="Eliminar"
-                      >
-                        ×
-                      </button>
+                      <button onClick={() => eliminarDelCarrito(item.id)} className="remove-btn" title="Eliminar">×</button>
                     </div>
                   ))}
                 </>
@@ -201,17 +196,12 @@ function Header() {
                   <strong>{formatearPrecio(totalPrecio)}</strong>
                 </div>
                 <div className="cart-actions">
-                  <button className="btn-secondary" onClick={() => setShowCart(false)}>
-                    Seguir Comprando
-                  </button>
-                  <Link to="/checkout" className="btn-primary" onClick={() => setShowCart(false)}>
-                    Comprar
-                  </Link>
+                  <button className="btn-secondary" onClick={() => setShowCart(false)}>Seguir Comprando</button>
+                  <Link to="/checkout" className="btn-primary" onClick={() => setShowCart(false)}>Comprar</Link>
                 </div>
               </div>
             )}
           </div>
-          
           <div className="cart-overlay" onClick={() => setShowCart(false)}></div>
         </>
       )}

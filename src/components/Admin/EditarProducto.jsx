@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import './AdminForm.css'; // Usa los estilos nuevos (Glassmorphism)
+import './AdminForm.css'; // Asegúrate de que este CSS exista también
 
-const NuevoProducto = () => {
+const EditarProducto = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // Obtenemos el ID de la URL
   const [guardando, setGuardando] = useState(false);
+  const [cargando, setCargando] = useState(true);
   
-  // Estado inicial vacío
   const [form, setForm] = useState({
     titulo: '',
     descripcion: '',
@@ -16,10 +17,40 @@ const NuevoProducto = () => {
     categoria: '',
     plataforma: 'PC',
     imagenUrl: '',
-    stock: 100,
+    stock: 0,
     creador: '',
     valoracion: 5.0
   });
+
+  // 1. Cargar datos del juego existente al abrir la página
+  useEffect(() => {
+    const obtenerJuego = async () => {
+        try {
+            const respuesta = await clienteAxios.get(`/videojuegos/${id}`);
+            const data = respuesta.data;
+            
+            // Mapeamos la respuesta del backend al estado del formulario
+            setForm({
+                titulo: data.name || data.titulo,
+                descripcion: data.description || data.descripcion,
+                precio: data.price || data.precio,
+                descuento: data.discount || data.descuento || 0,
+                categoria: data.category || data.categoria,
+                plataforma: data.plataformas || data.plataforma || 'PC',
+                imagenUrl: data.image || data.imagenUrl,
+                stock: data.stock || 0,
+                creador: data.creador || '',
+                valoracion: data.valoracion || 5.0
+            });
+            setCargando(false);
+        } catch (error) {
+            console.error("Error al cargar producto:", error);
+            alert("No se pudo cargar el producto o no existe.");
+            navigate('/panel-admin/productos');
+        }
+    };
+    if (id) obtenerJuego();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     setForm({
@@ -33,26 +64,26 @@ const NuevoProducto = () => {
     setGuardando(true);
 
     try {
-      // Petición POST al backend
-      // Asegúrate de que los nombres de campos coincidan con tu Entity Java
-      await clienteAxios.post('/videojuegos', form);
-      
-      alert('¡Juego creado exitosamente!');
+      // Petición PUT para actualizar
+      await clienteAxios.put(`/videojuegos/${id}`, form);
+      alert('¡Producto actualizado correctamente!');
       navigate('/panel-admin/productos');
     } catch (error) {
-      console.error("Error al crear:", error);
-      alert('Error al guardar el juego. Revisa la consola o los datos enviados.');
+      console.error("Error al actualizar:", error);
+      alert('Error al guardar los cambios. Verifica la conexión.');
     } finally {
       setGuardando(false);
     }
   };
 
+  if (cargando) return <div className="admin-container" style={{color:'white', padding:'2rem'}}>Cargando datos del juego...</div>;
+
   return (
     <div className="admin-container">
       <div className="admin-header-actions">
-        <h2>Agregar Nuevo Juego</h2>
+        <h2>Editar Producto #{id}</h2>
         <button className="btn-back" onClick={() => navigate('/panel-admin/productos')}>
-          ← Volver
+          ← Cancelar
         </button>
       </div>
 
@@ -62,59 +93,26 @@ const NuevoProducto = () => {
           <div className="form-row">
             <div className="form-group">
               <label>Título del Juego</label>
-              <input 
-                type="text" 
-                name="titulo" 
-                required 
-                value={form.titulo} 
-                onChange={handleChange} 
-                placeholder="Ej: Elden Ring" 
-              />
+              <input type="text" name="titulo" required value={form.titulo} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Desarrollador (Creador)</label>
-              <input 
-                type="text" 
-                name="creador" 
-                required 
-                value={form.creador} 
-                onChange={handleChange} 
-                placeholder="Ej: FromSoftware" 
-              />
+              <label>Desarrollador</label>
+              <input type="text" name="creador" required value={form.creador} onChange={handleChange} />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label>Precio (CLP)</label>
-              <input 
-                type="number" 
-                name="precio" 
-                required 
-                value={form.precio} 
-                onChange={handleChange} 
-                placeholder="45000" 
-              />
+              <input type="number" name="precio" required value={form.precio} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Descuento (%)</label>
-              <input 
-                type="number" 
-                name="descuento" 
-                value={form.descuento} 
-                onChange={handleChange} 
-                placeholder="0" 
-              />
+              <input type="number" name="descuento" value={form.descuento} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Stock Inicial</label>
-              <input 
-                type="number" 
-                name="stock" 
-                required 
-                value={form.stock} 
-                onChange={handleChange} 
-              />
+              <label>Stock</label>
+              <input type="number" name="stock" required value={form.stock} onChange={handleChange} />
             </div>
           </div>
 
@@ -145,20 +143,13 @@ const NuevoProducto = () => {
 
           <div className="form-group">
             <label>URL de Imagen</label>
-            <input 
-                type="text" 
-                name="imagenUrl" 
-                required 
-                value={form.imagenUrl} 
-                onChange={handleChange} 
-                placeholder="https://ejemplo.com/imagen.jpg" 
-            />
+            <input type="text" name="imagenUrl" required value={form.imagenUrl} onChange={handleChange} />
             {form.imagenUrl && (
               <div className="img-preview">
                 <img 
-                    src={form.imagenUrl} 
-                    alt="Vista previa" 
-                    onError={(e) => e.target.style.display = 'none'} 
+                  src={form.imagenUrl} 
+                  alt="Preview" 
+                  onError={(e) => e.target.style.display = 'none'} 
                 />
               </div>
             )}
@@ -166,18 +157,11 @@ const NuevoProducto = () => {
 
           <div className="form-group">
             <label>Descripción</label>
-            <textarea 
-                name="descripcion" 
-                rows="4" 
-                required 
-                value={form.descripcion} 
-                onChange={handleChange}
-                placeholder="Escribe una breve reseña del juego..."
-            ></textarea>
+            <textarea name="descripcion" rows="4" required value={form.descripcion} onChange={handleChange}></textarea>
           </div>
 
           <button type="submit" className="btn-save" disabled={guardando}>
-            {guardando ? 'Guardando...' : 'Crear Producto'}
+            {guardando ? 'Guardando...' : 'Actualizar Producto'}
           </button>
 
         </form>
@@ -186,4 +170,4 @@ const NuevoProducto = () => {
   );
 };
 
-export default NuevoProducto;
+export default EditarProducto;

@@ -1,81 +1,129 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import "./PanelAdmin.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import clienteAxios from '../../config/axios';
+import './AdminTablas.css'; 
 
-function Productos() {
+const Productos = () => {
+  const [productos, setProductos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const navigate = useNavigate();
+
+  const obtenerProductos = async () => {
+    try {
+      const respuesta = await clienteAxios.get('/videojuegos');
+      setProductos(respuesta.data);
+      setCargando(false);
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+      setCargando(false);
+    }
+  };
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  const handleEliminar = async (id) => {
+    if (window.confirm('¿Estás seguro de eliminar este juego? Esta acción no se puede deshacer.')) {
+      try {
+        await clienteAxios.delete(`/videojuegos/${id}`);
+        setProductos(productos.filter(prod => prod.id !== id));
+        alert('Producto eliminado correctamente');
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+        alert('Hubo un error al intentar eliminar el producto.');
+      }
+    }
+  };
+
+  const formatearPrecio = (precio) => `$${precio.toLocaleString('es-CL')}`;
+
+  if (cargando) return <div className="admin-container" style={{color:'white'}}>Cargando inventario...</div>;
+
   return (
-    <div className="panel-admin">
-      <aside className="sidebar-wrapper">
-        <div className="brand-logo">GAMES<span className="text-gradient">FOR</span>GAMERS</div>
-        <nav className="nav flex-column">
-          <Link to="/panel-admin" className="nav-link"><i className="bi bi-speedometer2" /> Dashboard</Link>
-          <Link to="/panel-admin/ordenes" className="nav-link"><i className="bi bi-cart-check" /> Ordenes</Link>
-          <Link to="/panel-admin/productos" className="nav-link active"><i className="bi bi-box-seam" /> Productos</Link>
-          <Link to="/panel-admin/usuarios" className="nav-link"><i className="bi bi-people" /> Usuarios</Link>
-          <Link to="/panel-admin/reportes" className="nav-link"><i className="bi bi-graph-up" /> Reportes</Link>
-        </nav>
-        <div className="mt-auto px-3">
-          <Link to="/" className="btn btn-outline-info w-100 mb-2">Ir a Tienda</Link>
-          <Link to="/login" className="btn btn-outline-danger w-100">Cerrar Sesión</Link>
-        </div>
-      </aside>
+    <div className="admin-container">
+      <div className="admin-header-actions">
+        <h2>Inventario de Productos</h2>
+        <button 
+          className="btn-add-new" 
+          onClick={() => navigate('/panel-admin/productos/nuevoproducto')}
+        >
+          + Nuevo Producto
+        </button>
+      </div>
 
-      <main className="main-content-admin">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="text-white">Inventario de Productos</h2>
-            <Link to="/panel-admin/productos/nuevoProducto" className="btn btn-success">
-                <i className="bi bi-plus-lg me-2"></i>Nuevo Producto
-            </Link>
-        </div>
-
-        <div className="dashboard-card p-0"> 
-            <div className="table-responsive">
-                <table className="table table-neon mb-0">
-                    <thead>
-                        <tr>
-                            <th>Img</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                            <th>Estado</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="Juego" className="img-thumb" /></td>
-                            <td className="fw-bold text-white">The Legend of Zelda</td>
-                            <td>Aventura</td>
-                            <td className="text-info">$59.99</td>
-                            <td>120</td>
-                            <td><span className="badge badge-neon-success">Disponible</span></td>
-                            <td><button className="btn btn-sm btn-outline-light"><i className="bi bi-pencil"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="Juego" className="img-thumb" /></td>
-                            <td className="fw-bold text-white">Cyberpunk 2077</td>
-                            <td>RPG</td>
-                            <td className="text-info">$39.99</td>
-                            <td>5</td>
-                            <td><span className="badge badge-neon-warning">Bajo Stock</span></td>
-                            <td><button className="btn btn-sm btn-outline-light"><i className="bi bi-pencil"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="Juego" className="img-thumb" /></td>
-                            <td className="fw-bold text-white">Elden Ring</td>
-                            <td>RPG</td>
-                            <td className="text-info">$69.99</td>
-                            <td>0</td>
-                            <td><span className="badge badge-neon-danger">Agotado</span></td>
-                            <td><button className="btn btn-sm btn-outline-light"><i className="bi bi-pencil"></i></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-      </main>
+      <div className="table-responsive">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th style={{width: '80px'}}>Img</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productos.map((prod) => (
+              <tr key={prod.id}>
+                <td>
+                  <img 
+                    src={prod.image || prod.imagenUrl || "https://via.placeholder.com/50"} 
+                    alt={prod.name} 
+                    className="table-img" 
+                  />
+                </td>
+                <td className="fw-bold">{prod.name || prod.titulo}</td>
+                <td>{prod.category || prod.categoria}</td>
+                <td className="text-accent">{formatearPrecio(prod.price || prod.precio)}</td>
+                <td>
+                  {/* Badge de Stock */}
+                  <span className={`badge ${(prod.stock || 0) < 10 ? 'bg-danger' : 'bg-primary'}`}>
+                    {prod.stock}
+                  </span>
+                </td>
+                <td>
+                   {/* Estado calculado */}
+                   <span className={`badge ${(prod.stock || 0) > 0 ? 'bg-success' : 'bg-danger'}`}>
+                    {(prod.stock || 0) > 0 ? 'Disponible' : 'Agotado'}
+                  </span>
+                </td>
+                <td>
+                  <div className="action-buttons">
+                    <button 
+                        className="btn-icon edit" 
+                        title="Editar"
+                        onClick={() => navigate(`/panel-admin/productos/editar/${prod.id}`)}
+                    >
+                        ✏️
+                    </button>
+                    
+                    <button 
+                      className="btn-icon delete" 
+                      title="Eliminar"
+                      onClick={() => handleEliminar(prod.id)}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            
+            {productos.length === 0 && (
+                <tr>
+                    <td colSpan="7" style={{textAlign:'center', padding:'2rem'}}>
+                        No hay productos registrados.
+                    </td>
+                </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
+
 export default Productos;

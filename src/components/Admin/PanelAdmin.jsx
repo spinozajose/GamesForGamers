@@ -1,128 +1,127 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import "./PanelAdmin.css";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
+import './PanelAdmin.css';
 
-function PanelAdmin() {
+const PanelAdmin = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [usuario, setUsuario] = useState(null);
+
+  // 1. Seguridad: Verificar si es admin al cargar
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (!usuarioGuardado) {
+      navigate('/login');
+      return;
+    }
+
+    const user = JSON.parse(usuarioGuardado);
+    // Verificación robusta de permisos
+    const esAdmin = user.esAdmin || user.permisosAdmin || user.permisos_admin;
+
+    if (!esAdmin) {
+      alert("Acceso denegado: Se requieren permisos de Administrador.");
+      navigate('/');
+      return;
+    }
+    setUsuario(user);
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('usuario');
+    navigate('/login');
+  };
+
+  if (!usuario) return null;
+
+  // Helper para marcar el enlace activo en el menú
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
+
   return (
-    <div className="panel-admin">
+    <div className="admin-layout">
       
-      
-      <aside className="sidebar-wrapper">
-        <div className="brand-logo">
-          GAMES<span className="text-gradient">FOR</span>GAMERS
+      {/* === SIDEBAR LATERAL === */}
+      <aside className="admin-sidebar">
+        <div className="admin-brand">
+          <h2>GFG Admin</h2>
+          <span className="admin-badge">PRO</span>
         </div>
 
-        <nav className="nav flex-column">
-          <Link to="/panel-admin" className="nav-link active">
-            <i className="bi bi-speedometer2" /> Dashboard
+        <nav className="admin-nav">
+          <Link to="/panel-admin" className={`admin-link ${location.pathname === '/panel-admin' ? 'active' : ''}`}>
+             Dashboard
           </Link>
-          <Link to="/panel-admin/ordenes" className="nav-link">
-            <i className="bi bi-cart-check" /> Ordenes
+          <Link to="/panel-admin/ordenes" className={`admin-link ${isActive('/panel-admin/ordenes') ? 'active' : ''}`}>
+             Órdenes
           </Link>
-          <Link to="/panel-admin/productos" className="nav-link">
-            <i className="bi bi-box-seam" /> Productos
+          <Link to="/panel-admin/productos" className={`admin-link ${isActive('/panel-admin/productos') ? 'active' : ''}`}>
+             Productos
           </Link>
-          <Link to="/panel-admin/usuarios" className="nav-link">
-            <i className="bi bi-people" /> Usuarios
+          <Link to="/panel-admin/usuarios" className={`admin-link ${isActive('/panel-admin/usuarios') ? 'active' : ''}`}>
+             Usuarios
           </Link>
-          <Link to="/panel-admin/reportes" className="nav-link">
-            <i className="bi bi-graph-up" /> Reportes
+          <Link to="/panel-admin/reportes" className={`admin-link ${isActive('/panel-admin/reportes') ? 'active' : ''}`}>
+             Reportes
           </Link>
         </nav>
 
-
-        <div className="mt-auto px-3">
-          <Link to="/" className="btn btn-outline-info w-100 mb-2">
-            <i className="bi bi-shop me-2"></i> Ir a Tienda
-          </Link>
-          <Link to="/login" className="btn btn-outline-danger w-100">
-             Cerrar Sesión
+        <div className="admin-user-info">
+          <p>Admin: {usuario.username || usuario.nombre || "Usuario"}</p>
+          <button onClick={handleLogout} className="btn-logout">Cerrar Sesión</button>
+          <Link to="/" className="btn-tienda-link" style={{display:'block', textAlign:'center', marginTop:'10px', fontSize:'0.8rem', color:'#00f2ff', textDecoration:'none'}}>
+            Ir a la Tienda →
           </Link>
         </div>
       </aside>
 
-
-      <main className="main-content-admin">
-
-        <div className="top-header">
-          <h2 className="text-white">Dashboard General</h2>
-          <div className="text-white">Bienvenido, Admin</div>
-        </div>
-
-        <div className="row g-4 mb-5">
-          <div className="col-md-4">
-            <div className="dashboard-card d-flex justify-content-between align-items-center">
-              <div>
-                <div className="card-title">Ingresos Totales</div>
-                <div className="card-value">$12,450</div>
-                <small className="text-success">↑ 15% este mes</small>
+      {/* === CONTENIDO PRINCIPAL === */}
+      <main className="admin-content">
+        
+        {/* Si estamos en la raíz del panel, mostramos el Dashboard de bienvenida */}
+        {location.pathname === '/panel-admin' ? (
+          <div className="dashboard-welcome">
+            <h1>Panel de Control</h1>
+            
+            <div className="stats-overview">
+              <div className="stat-card">
+                <h3>Ingresos Totales</h3>
+                <p className="stat-value">$12,450</p>
+                <small style={{color:'#00ff88'}}>↑ 15% este mes</small>
               </div>
-              <i className="bi bi-currency-dollar icon-bg"></i>
+              <div className="stat-card">
+                <h3>Pedidos Nuevos</h3>
+                <p className="stat-value">58</p>
+                <small style={{color:'#ffbb33'}}>10 pendientes</small>
+              </div>
+              <div className="stat-card">
+                <h3>Usuarios Activos</h3>
+                <p className="stat-value">1,203</p>
+                <small style={{color:'#00ff88'}}>↑ 8 nuevos hoy</small>
+              </div>
+            </div>
+
+            <div className="quick-actions">
+                <h3>Accesos Directos</h3>
+                <div className="action-buttons">
+                    <button onClick={() => navigate('/panel-admin/productos')} className="btn-action">
+                         Inventario
+                    </button>
+                    <button onClick={() => navigate('/panel-admin/usuarios')} className="btn-action">
+                         Usuarios
+                    </button>
+                    <button onClick={() => navigate('/panel-admin/ordenes')} className="btn-action">
+                         Órdenes
+                    </button>
+                </div>
             </div>
           </div>
-          
-          <div className="col-md-4">
-            <div className="dashboard-card d-flex justify-content-between align-items-center">
-              <div>
-                <div className="card-title">Pedidos Nuevos</div>
-                <div className="card-value">58</div>
-                <small className="text-warning">10 pendientes</small>
-              </div>
-              <i className="bi bi-bag icon-bg"></i>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="dashboard-card d-flex justify-content-between align-items-center">
-              <div>
-                <div className="card-title">Usuarios Activos</div>
-                <div className="card-value">1,203</div>
-                <small className="text-success">↑ 8 nuevos hoy</small>
-              </div>
-              <i className="bi bi-people icon-bg"></i>
-            </div>
-          </div>
-        </div>
-
-        <h4 className="text-white mb-3">Accesos Directos</h4>
-        <div className="row g-4">
-            <div className="col-md-3 col-sm-6">
-                <Link to="/panel-admin/productos" className="text-decoration-none">
-                    <div className="dashboard-card text-center hover-effect">
-                        <i className="bi bi-box-seam fs-1 text-info mb-3 d-block"></i>
-                        <h5 className="text-white">Inventario</h5>
-                    </div>
-                </Link>
-            </div>
-            <div className="col-md-3 col-sm-6">
-                <Link to="/panel-admin/usuarios" className="text-decoration-none">
-                    <div className="dashboard-card text-center hover-effect">
-                        <i className="bi bi-person-gear fs-1 text-info mb-3 d-block"></i>
-                        <h5 className="text-white">Usuarios</h5>
-                    </div>
-                </Link>
-            </div>
-             <div className="col-md-3 col-sm-6">
-                <Link to="/panel-admin/ordenes" className="text-decoration-none">
-                    <div className="dashboard-card text-center hover-effect">
-                        <i className="bi bi-file-earmark-text fs-1 text-info mb-3 d-block"></i>
-                        <h5 className="text-white">Ordenes</h5>
-                    </div>
-                </Link>
-            </div>
-             <div className="col-md-3 col-sm-6">
-                <Link to="/panel-admin/config" className="text-decoration-none">
-                    <div className="dashboard-card text-center hover-effect">
-                        <i className="bi bi-gear fs-1 text-info mb-3 d-block"></i>
-                        <h5 className="text-white">Ajustes</h5>
-                    </div>
-                </Link>
-            </div>
-        </div>
-
+        ) : (
+          /* IMPORTANTE: Aquí se renderizan las sub-rutas (Productos, Ordenes, etc.) */
+          <Outlet />
+        )}
       </main>
     </div>
   );
-}
+};
 
 export default PanelAdmin;

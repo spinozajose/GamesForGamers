@@ -1,61 +1,82 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import "./PanelAdmin.css";
+import React, { useState, useEffect } from 'react';
+import clienteAxios from '../../config/axios';
+import './AdminTablas.css';
 
-function Usuarios() {
+const Usuarios = () => {
+  const [usuarios, setUsuarios] = useState([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const respuesta = await clienteAxios.get('/usuarios');
+        setUsuarios(respuesta.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    fetchUsuarios();
+  }, []);
+
+  const toggleAdmin = async (usuario) => {
+    if(!window.confirm(`¿Cambiar permisos de admin para ${usuario.nombreUsuario}?`)) return;
+    
+    try {
+      const usuarioActualizado = { ...usuario, permisosAdmin: !usuario.permisosAdmin };
+      // Ojo: asegúrate de enviar la contraseña o manejarlo en el backend para que no se borre/encripte doble
+      await clienteAxios.put(`/usuarios/${usuario.id}`, usuarioActualizado);
+      
+      setUsuarios(usuarios.map(u => u.id === usuario.id ? usuarioActualizado : u));
+    } catch (error) {
+      alert("Error al actualizar permisos");
+    }
+  };
+
+  if (cargando) return <div className="admin-loading">Cargando usuarios...</div>;
+
   return (
-    <div className="panel-admin">
-      <aside className="sidebar-wrapper">
-        <div className="brand-logo">GAMES<span className="text-gradient">FOR</span>GAMERS</div>
-        <nav className="nav flex-column">
-          <Link to="/panel-admin" className="nav-link"><i className="bi bi-speedometer2" /> Dashboard</Link>
-          <Link to="/panel-admin/ordenes" className="nav-link"><i className="bi bi-cart-check" /> Ordenes</Link>
-          <Link to="/panel-admin/productos" className="nav-link"><i className="bi bi-box-seam" /> Productos</Link>
-          <Link to="/panel-admin/usuarios" className="nav-link active"><i className="bi bi-people" /> Usuarios</Link>
-          <Link to="/panel-admin/reportes" className="nav-link"><i className="bi bi-graph-up" /> Reportes</Link>
-        </nav>
-        <div className="mt-auto px-3">
-          <Link to="/" className="btn btn-outline-info w-100 mb-2">Ir a Tienda</Link>
-          <Link to="/login" className="btn btn-outline-danger w-100">Cerrar Sesión</Link>
-        </div>
-      </aside>
-
-      <main className="main-content-admin">
-        <h2 className="text-white mb-4">Gestión de Usuarios</h2>
-
-        <div className="dashboard-card p-0">
-            <div className="table-responsive">
-                <table className="table table-neon mb-0">
-                    <thead>
-                        <tr>
-                            <th>Avatar</th>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Rol</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="User" className="img-thumb img-user-circle" /></td>
-                            <td className="text-white">Luna Admin</td>
-                            <td>luna@example.com</td>
-                            <td><span className="badge bg-info text-dark">ADMIN</span></td>
-                            <td><button className="btn btn-sm btn-outline-light"><i className="bi bi-gear"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="User" className="img-thumb img-user-circle" /></td>
-                            <td>Pedro Cliente</td>
-                            <td>pedro@example.com</td>
-                            <td><span className="badge bg-secondary">CLIENTE</span></td>
-                            <td><button className="btn btn-sm btn-outline-light"><i className="bi bi-pencil"></i></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-      </main>
+    <div className="admin-container">
+      <h2>Usuarios Registrados</h2>
+      <div className="table-responsive">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usuarios.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.nombreUsuario}</td>
+                <td>{user.email}</td>
+                <td>
+                  <span className={`badge ${user.permisosAdmin ? 'bg-success' : 'bg-primary'}`}>
+                    {user.permisosAdmin ? 'ADMIN' : 'USER'}
+                  </span>
+                </td>
+                <td>
+                  <button 
+                    className="btn-icon"
+                    onClick={() => toggleAdmin(user)}
+                    title="Cambiar Rol"
+                  >
+                    🔑
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
+
 export default Usuarios;

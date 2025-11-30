@@ -1,72 +1,84 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import "./PanelAdmin.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import clienteAxios from '../../config/axios';
+import './AdminTablas.css'; 
 
-function Ordenes() {
+const Ordenes = () => {
+  const [ordenes, setOrdenes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchOrdenes = async () => {
+      try {
+        // Necesitarás crear un endpoint GET /api/ordenes (para admin) en tu backend
+        // que devuelva TODAS las órdenes, no solo las de un usuario.
+        const respuesta = await clienteAxios.get('/ordenes/todas'); 
+        setOrdenes(respuesta.data);
+      } catch (error) {
+        console.error("Error al cargar órdenes:", error);
+        // Datos mock temporales por si el backend aún no tiene el endpoint
+        setOrdenes([
+            { id: 1001, usuario: { nombre: "Admin Test" }, fecha: "2024-05-20", total: 45000, estado: "COMPLETADA" }
+        ]);
+      } finally {
+        setCargando(false);
+      }
+    };
+    fetchOrdenes();
+  }, []);
+
+  const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString();
+  const formatearPrecio = (precio) => `$${precio.toLocaleString('es-CL')}`;
+
+  if (cargando) return <div className="admin-loading">Cargando ventas...</div>;
+
   return (
-    <div className="panel-admin">
-      <aside className="sidebar-wrapper">
-        <div className="brand-logo">GAMES<span className="text-gradient">FOR</span>GAMERS</div>
-        <nav className="nav flex-column">
-          <Link to="/panel-admin" className="nav-link"><i className="bi bi-speedometer2" /> Dashboard</Link>
-          <Link to="/panel-admin/ordenes" className="nav-link active"><i className="bi bi-cart-check" /> Ordenes</Link>
-          <Link to="/panel-admin/productos" className="nav-link"><i className="bi bi-box-seam" /> Productos</Link>
-          <Link to="/panel-admin/usuarios" className="nav-link"><i className="bi bi-people" /> Usuarios</Link>
-          <Link to="/panel-admin/reportes" className="nav-link"><i className="bi bi-graph-up" /> Reportes</Link>
-        </nav>
-        <div className="mt-auto px-3">
-          <Link to="/" className="btn btn-outline-info w-100 mb-2">Ir a Tienda</Link>
-          <Link to="/login" className="btn btn-outline-danger w-100">Cerrar Sesión</Link>
-        </div>
-      </aside>
+    <div className="admin-container">
+      <div className="admin-header-actions">
+        <h2>Historial de Ventas</h2>
+      </div>
 
-      <main className="main-content-admin">
-        <h2 className="text-white mb-4">Historial de Órdenes</h2>
-        
-        <div className="dashboard-card p-0">
-            <div className="table-responsive">
-                <table className="table table-neon mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID Orden</th>
-                            <th>Cliente</th>
-                            <th>Fecha</th>
-                            <th>Monto</th>
-                            <th>Estado</th>
-                            <th>Detalles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="text-info">#ORD-1001</td>
-                            <td>Juan Pérez</td>
-                            <td>2023-10-25</td>
-                            <td className="text-white fw-bold">$150.00</td>
-                            <td><span className="badge badge-neon-success">Completado</span></td>
-                            <td><button className="btn btn-sm btn-outline-info">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td className="text-info">#ORD-1002</td>
-                            <td>María González</td>
-                            <td>2023-10-26</td>
-                            <td className="text-white fw-bold">$45.00</td>
-                            <td><span className="badge badge-neon-warning">Pendiente</span></td>
-                            <td><button className="btn btn-sm btn-outline-info">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td className="text-info">#ORD-1003</td>
-                            <td>Carlos Ruiz</td>
-                            <td>2023-10-26</td>
-                            <td className="text-white fw-bold">$200.00</td>
-                            <td><span className="badge badge-neon-danger">Cancelado</span></td>
-                            <td><button className="btn btn-sm btn-outline-info">Ver</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-      </main>
+      <div className="table-responsive">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID Orden</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ordenes.map((orden) => (
+              <tr key={orden.id}>
+                <td>#{orden.id}</td>
+                <td>{orden.usuario?.nombre || "Usuario Eliminado"}</td>
+                <td>{formatearFecha(orden.fecha)}</td>
+                <td className="fw-bold text-accent">{formatearPrecio(orden.total)}</td>
+                <td>
+                  <span className={`badge ${orden.estado === 'COMPLETADA' ? 'bg-success' : 'bg-danger'}`}>
+                    {orden.estado}
+                  </span>
+                </td>
+                <td>
+                  <button 
+                    className="btn-icon" 
+                    title="Ver Detalles"
+                    onClick={() => navigate(`/panel-admin/ordenes/${orden.id}`)}
+                  >
+                    👁️
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
+
 export default Ordenes;
