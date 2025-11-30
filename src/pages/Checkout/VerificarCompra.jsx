@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useCarrito } from "../../context/CarritoContext";
 import { useNavigate } from "react-router-dom";
-// Importamos tus validaciones
+// Importamos tus validaciones y cliente axios
 import { useValidacionesCheckout, validarFormularioCompleto } from "../../assets/js/ValidacionesCheckout";
+import clienteAxios from "../../config/axios"; // <--- IMPORTANTE
 import "./VerificarCompra.css";
 
 const VerificarCompra = () => {
   const { carrito, totalPrecio, limpiarCarrito, eliminarDelCarrito, totalItems } = useCarrito();
   const navigate = useNavigate();
   
-  // Hook de tus validaciones
   const { validarCampoEnTiempoReal } = useValidacionesCheckout();
 
   const [procesando, setProcesando] = useState(false);
   const [ordenCompletada, setOrdenCompletada] = useState(false);
   const [ordenId, setOrdenId] = useState(null);
+  const [usuario, setUsuario] = useState(null); // Estado para el usuario logueado
 
-  // Estados para manejo de errores y campos "tocados"
   const [errores, setErrores] = useState({});
   const [camposTocados, setCamposTocados] = useState({});
 
@@ -39,7 +39,22 @@ const VerificarCompra = () => {
     cvv: "",
   });
 
-  // Helper para formatear RUT visualmente (12.345.678-9)
+  // AL CARGAR: Verificar si hay usuario logueado
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      const user = JSON.parse(usuarioGuardado);
+      setUsuario(user);
+      // Pre-llenar email si está disponible
+      setDatosEnvio(prev => ({ ...prev, email: user.email || "" }));
+    } else {
+      // Si no está logueado, podrías redirigirlo al login o dejar que compre como invitado (si tu backend lo permite)
+      // Por ahora asumiremos que debe estar logueado para guardar la orden
+      alert("Debes iniciar sesión para completar la compra");
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const formatearRUT = (rut) => {
     let valor = rut.replace(/[^0-9kK]/g, "");
     if (valor.length > 1) {
@@ -50,24 +65,18 @@ const VerificarCompra = () => {
     return valor;
   };
 
-  // Manejo de cambios en inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     let valorFinal = value;
 
-    // Formateo especial para RUT
-    if (name === "rut") {
-        valorFinal = formatearRUT(value);
-    }
+    if (name === "rut") valorFinal = formatearRUT(value);
 
-    // Actualizar estado
     if (name in datosEnvio) {
       setDatosEnvio(prev => ({ ...prev, [name]: valorFinal }));
     } else {
       setDatosPago(prev => ({ ...prev, [name]: valorFinal }));
     }
 
-    // Si el campo ya fue tocado (blur), validamos en tiempo real para quitar el error si corrige
     if (camposTocados[name]) {
         const todosLosDatos = { ...datosEnvio, ...datosPago, [name]: valorFinal };
         const error = validarCampoEnTiempoReal(name, valorFinal, todosLosDatos);
@@ -75,57 +84,69 @@ const VerificarCompra = () => {
     }
   };
 
-  // Manejo de Blur (cuando el usuario sale del input)
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setCamposTocados(prev => ({ ...prev, [name]: true }));
-    
     const todosLosDatos = { ...datosEnvio, ...datosPago };
     const error = validarCampoEnTiempoReal(name, value, todosLosDatos);
     setErrores(prev => ({ ...prev, [name]: error }));
   };
 
-  const handleProcesarOrden = (e) => {
+  const handleProcesarOrden = async (e) => {
     e.preventDefault();
 
-    // 1. Validar todo el formulario con tu función importada
+    // 1. Validaciones Frontend
     const validacion = validarFormularioCompleto(datosEnvio, datosPago);
-
-    // 2. Si hay errores, mostrarlos y detener proceso
     if (!validacion.esValido) {
         setErrores(validacion.errores);
-        // Marcar todos como tocados para que se pongan rojos
         const toques = {};
         Object.keys({...datosEnvio, ...datosPago}).forEach(k => toques[k] = true);
         setCamposTocados(toques);
-        
-        // Scroll al primer error
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
+    if (!usuario || !usuario.idUsuario) {
+        alert("Error: No se identificó al usuario. Por favor inicia sesión nuevamente.");
         return;
     }
 
     setProcesando(true);
 
-    // Simulación de proceso exitoso
-    setTimeout(() => {
-      const nuevoOrdenId = Math.floor(Math.random() * 1000000).toString();
-      setOrdenId(nuevoOrdenId);
-      setProcesando(false);
+    try {
+      // 2. PREPARAR DATOS PARA EL BACKEND
+      // Formato esperado por OrdenRequest.java
+      const ordenPayload = {
+        usuarioId: usuario.idUsuario, // ID del usuario logueado
+        items: carrito.map(item => ({
+            videojuegoId: item.id, // ID del juego
+            cantidad: item.cantidad
+        }))
+      };
+
+      // 3. ENVIAR AL BACKEND
+      const respuesta = await clienteAxios.post('/ordenes', ordenPayload);
+      
+      // 4. ÉXITO
+      const ordenCreada = respuesta.data;
+      setOrdenId(ordenCreada.id); // Guardamos el ID real de la BD
       setOrdenCompletada(true);
       limpiarCarrito();
-    }, 2500);
+
+    } catch (error) {
+      console.error("Error al procesar orden:", error);
+      alert("Hubo un error al procesar tu compra. Por favor intenta nuevamente.");
+    } finally {
+      setProcesando(false);
+    }
   };
 
   const formatearPrecio = (precio) => `$${precio.toLocaleString("es-CL")}`;
-
-  // Helper para clases de error visual
   const getInputClass = (campo) => {
     if (camposTocados[campo] && errores[campo]) return "input-error";
     if (camposTocados[campo] && !errores[campo]) return "input-success";
     return "";
   };
-
-  // --- RENDERIZADO (Igual que antes, pero con clases dinámicas y mensajes de error) ---
 
   if (ordenCompletada) {
     return (
@@ -133,7 +154,7 @@ const VerificarCompra = () => {
         <div className="orden-exitosa-card">
             <div className="icon-success">✅</div>
             <h2>¡Gracias por tu compra!</h2>
-            <p>Tu orden <strong>#{ordenId}</strong> ha sido confirmada.</p>
+            <p>Tu orden <strong>#{ordenId}</strong> ha sido guardada exitosamente.</p>
             <p className="email-note">Hemos enviado los detalles a <strong>{datosEnvio.email}</strong></p>
             <button onClick={() => navigate("/")} className="btn-home">Volver al Inicio</button>
         </div>
@@ -356,7 +377,7 @@ const VerificarCompra = () => {
             </form>
           </div>
 
-          {/* RESUMEN (Sin cambios estructurales) */}
+          {/* RESUMEN */}
           <div className="checkout-summary-section">
             <div className="summary-card">
                 <h3>Resumen del Pedido</h3>
@@ -369,7 +390,7 @@ const VerificarCompra = () => {
                             <div className="summary-info">
                                 <h4>{item.name}</h4>
                                 <p className="qty">Cant: {item.cantidad}</p>
-                                <p className="price">{formatearPrecio(item.precioNumerico * item.cantidad)}</p>
+                                <p className="price">{formatearPrecio((item.precioNumerico || item.price) * item.cantidad)}</p>
                                 {item.releaseDate && <span className="badge-preorder">🚀 Precompra</span>}
                             </div>
                             <button onClick={() => eliminarDelCarrito(item.id)} className="btn-remove-sm">×</button>

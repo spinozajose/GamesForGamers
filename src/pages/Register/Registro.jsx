@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useValidacionesRegister } from '../../assets/js/ValidacionesRegister';
+import clienteAxios from '../../config/axios'; // <--- IMPORTANTE: Conexión con Backend
 import './Registro.css';
 
 const Registro = () => {
@@ -10,7 +11,7 @@ const Registro = () => {
   const { validaciones, validarFormularioCompleto, formatearRUT } = useValidacionesRegister();
 
   const [formData, setFormData] = useState({
-    username: '',
+    username: '', // En el backend se llama 'nombreUsuario'
     email: '',
     password: '',
     confirmPassword: '',
@@ -50,21 +51,19 @@ const Registro = () => {
     const funcionValidar = validaciones[name];
 
     if (funcionValidar) {
-      // Pasamos 'value' y 'formData' porque confirmPassword necesita ambos
       const error = funcionValidar(value, formData);
       setErrores(prev => ({ ...prev, [name]: error }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validar todo el formulario antes de enviar
+    // 1. Validar todo el formulario antes de enviar
     const validacion = validarFormularioCompleto(formData);
 
     if (!validacion.esValido) {
       setErrores(validacion.errores);
-      // Scroll al primer error (opcional)
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -76,12 +75,42 @@ const Registro = () => {
 
     setProcesando(true);
 
-    // Simulación de envío al Backend
-    setTimeout(() => {
-      console.log('Datos Registro:', formData);
-      setProcesando(false);
+    try {
+      // 2. Preparar el objeto para Spring Boot
+      // Mapeamos 'username' a 'nombreUsuario' que es lo que espera tu Entidad Java
+      const usuarioParaBackend = {
+        nombreUsuario: formData.username,
+        email: formData.email,
+        password: formData.password,
+        nombre: formData.nombre,
+        rut: formData.rut,
+        direccion: formData.direccion,
+        ciudad: formData.ciudad,
+        region: formData.region,
+        comuna: formData.comuna,
+        permisosAdmin: false // Por defecto false
+      };
+
+      // 3. Enviar datos reales al Backend
+      await clienteAxios.post('/usuarios', usuarioParaBackend);
+      
+      // 4. Éxito
+      alert("¡Cuenta creada con éxito! Bienvenido a GFG.");
       navigate('/login');
-    }, 2000);
+
+    } catch (error) {
+      console.error("Error en registro:", error);
+      
+      // Manejo básico de errores del servidor
+      if (error.response) {
+        // Si el backend responde con error (ej: email duplicado)
+        alert(`Error: ${error.response.data.message || "No se pudo crear la cuenta"}`);
+      } else {
+        alert("Error de conexión con el servidor.");
+      }
+    } finally {
+      setProcesando(false);
+    }
   };
 
   // Helper para clases CSS de error
@@ -190,7 +219,6 @@ const Registro = () => {
                         {errores.ciudad && <span className="error-msg">{errores.ciudad}</span>}
                     </div>
                     
-                    {/* Selects Simplificados para demo (se pueden llenar con API) */}
                     <div className="form-group-neon">
                         <label>Región</label>
                         <select 
@@ -199,7 +227,7 @@ const Registro = () => {
                             className={getInputClass('region')}
                         >
                             <option value="">Elegir...</option>
-                            <option value="rm">RM</option>
+                            <option value="rm">Metropolitana</option>
                             <option value="valpo">Valparaíso</option>
                             <option value="biobio">Biobío</option>
                         </select>
@@ -217,7 +245,7 @@ const Registro = () => {
                         <option value="">Elegir...</option>
                         <option value="stgo">Santiago</option>
                         <option value="provi">Providencia</option>
-                        <option value="florida">La Florida</option>
+                        <option value="vina">Viña del Mar</option>
                     </select>
                     {errores.comuna && <span className="error-msg">{errores.comuna}</span>}
                 </div>
@@ -236,7 +264,12 @@ const Registro = () => {
               </label>
 
               <button type="submit" className="btn-register" disabled={procesando}>
-                {procesando ? 'Creando Cuenta...' : 'REGISTRARSE'}
+                {procesando ? (
+                  <>
+                    <span className="spinner-small" style={{display:'inline-block', width:'15px', height:'15px', border:'2px solid white', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 1s linear infinite', marginRight:'10px'}}></span>
+                    Procesando...
+                  </>
+                ) : 'REGISTRARSE'}
               </button>
             </div>
 

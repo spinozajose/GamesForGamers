@@ -1,4 +1,4 @@
-/* ===== ENCABEZADO CENTRADO VERTICALMENTE ===== */
+/* ===== ENCABEZADO ESTÁTICO Y PERFECTAMENTE ALINEADO ===== */
 
 .header {
     background: rgba(15, 12, 41, 0.98);
@@ -10,18 +10,20 @@
 }
 
 .header-container {
-    height: 70px; /* Altura fija de la barra */
+    height: 70px;
     display: flex;
-    align-items: center; /* <--- ESTO ES LA CLAVE: Centra todo verticalmente */
+    align-items: center;
     justify-content: flex-start;
     padding: 0 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    /* Eliminamos gap aquí para controlar separaciones manualmente */
 }
 
-/* --- 1. LOGO --- */
+/* --- LOGO --- */
 .logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
     font-size: 1.6rem;
     font-weight: 800;
     background: linear-gradient(45deg, rgb(var(--rgb-primary)), rgb(var(--rgb-accent)));
@@ -29,23 +31,25 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-decoration: none;
-    
-    /* Quitamos height: 100% para que el flex del padre lo centre */
-    display: flex; 
-    align-items: center;
-    margin-right: 3rem; /* Separación con el menú */
-    line-height: 1; /* Evita espacios extra arriba/abajo de la fuente */
+    margin-right: 3rem;
+    padding: 0;
+    line-height: 1;
 }
 
-/* --- 2. NAVEGACIÓN --- */
+/* --- NAVEGACIÓN --- */
 .nav-menu {
     display: flex;
     align-items: center;
+    height: 100%;
     gap: 2rem;
-    padding-top: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     font-weight: 500;
@@ -53,12 +57,8 @@
     background: transparent;
     border: none;
     padding: 0;
-    transition: none; /* Sin animaciones */
-    
-    /* Aseguramos que el texto no tenga márgenes invisibles */
-    margin: 0;
-    line-height: 1; 
-    display: block; /* Comportamiento de texto simple */
+    transition: none;
+    line-height: 1;
 }
 
 .nav-link:hover {
@@ -70,16 +70,15 @@
     font-weight: 700;
 }
 
-/* --- 3. ACCIONES DERECHA --- */
+/* --- ACCIONES DERECHA --- */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Empuja a la derecha */
+    height: 100%;
+    margin-left: auto;
     gap: 1.5rem;
-    /* Quitamos height: 100% */
 }
 
-/* Carrito */
 .cart-icon {
     display: flex;
     align-items: center;
@@ -89,6 +88,8 @@
     padding: 0;
     color: rgba(255, 255, 255, 0.8);
     cursor: pointer;
+    height: 100%;
+    transition: none;
     position: relative;
 }
 
@@ -98,13 +99,14 @@
 
 .cart-icon-symbol {
     font-size: 1.4rem;
-    line-height: 1; /* Importante para quitar espacio vertical extra */
-    display: block;
+    display: flex;
+    align-items: center;
+    line-height: 1;
 }
 
 .cart-badge {
     position: absolute;
-    top: -5px; /* Ajuste fino para el puntito rojo */
+    top: -5px;
     right: -8px;
     background: #ff4444;
     color: white;
@@ -123,16 +125,19 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    height: 100%;
 }
 
 .user-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
     background: transparent;
-    padding: 0;
-    margin: 0;
+    transition: none;
     line-height: 1;
 }
 
@@ -144,14 +149,18 @@
     color: rgb(var(--rgb-accent));
 }
 
-.separator {
-    color: rgba(255, 255, 255, 0.2);
-    font-size: 1rem;
-    line-height: 1;
-    margin-top: -2px; /* Pequeño ajuste visual óptico para el separador "|" */
+.user-link.register:hover {
+    color: #fff;
 }
 
-/* --- MENÚ HAMBURGUESA --- */
+.separator {
+    color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 2px;
+}
+
 .menu-toggle {
     display: none;
     background: none;
@@ -161,7 +170,7 @@
     margin-left: 1rem;
 }
 
-/* --- RESPONSIVE --- */
+/* Responsive */
 @media (max-width: 968px) {
     .header-container {
         justify-content: space-between;
@@ -181,11 +190,12 @@
         height: auto;
         background: rgb(15, 12, 41);
         padding: 2rem;
+        align-items: center;
         border-bottom: 1px solid rgba(var(--rgb-primary), 0.2);
     }
 
     .nav-link {
-        padding: 10px 0; /* En móvil sí necesitamos un poco de área de toque */
+        padding: 10px 0;
         font-size: 1.1rem;
     }
 
@@ -195,25 +205,7 @@
 
     .menu-toggle {
         display: block;
+        color: white;
+        font-size: 1.5rem;
     }
-    
-    .menu-bar {
-        width: 24px;
-        height: 2px;
-        background: white;
-        margin: 4px 0;
-        display: block;
-    }
-}
-
-/* Dropdown Carrito (Sin cambios) */
-.cart-dropdown {
-    position: fixed;
-    top: 70px;
-    right: 2rem;
-    width: 320px;
-    background: rgb(20, 16, 50);
-    border: 1px solid rgba(var(--rgb-primary), 0.2);
-    z-index: 1001;
-    color: white;
 }

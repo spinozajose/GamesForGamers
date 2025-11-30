@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useValidacionesLogin } from '../../assets/js/ValidacionesLogin'; // Importamos tus validaciones
+import { useValidacionesLogin } from '../../assets/js/ValidacionesLogin';
+import clienteAxios from '../../config/axios'; // <--- IMPORTANTE: Conexión con Backend
 import './InicioSesion.css';
 
 const InicioSesion = () => {
   const navigate = useNavigate();
   
-  // Usamos tu hook personalizado
-  const { validaciones, validarFormularioLogin, validarCredenciales } = useValidacionesLogin();
+  // Usamos tu hook solo para validaciones de formato (frontend)
+  const { validaciones, validarFormularioLogin } = useValidacionesLogin();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -22,18 +23,15 @@ const InicioSesion = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Limpiar el error específico cuando el usuario escribe para mejorar la UX
+    // Limpiar errores visuales al escribir
     if (errores[name]) {
       setErrores({ ...errores, [name]: null });
     }
-    // Limpiar error general de credenciales si existe
     if (errorGeneral) setErrorGeneral(null);
   };
 
-  // Validar campo individual al perder el foco (onBlur)
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    // Buscamos la función de validación correspondiente en tu objeto 'validaciones'
     const funcionValidar = validaciones[name]; 
     
     if (funcionValidar) {
@@ -46,7 +44,7 @@ const InicioSesion = () => {
     e.preventDefault();
     setErrorGeneral(null);
 
-    // 1. Validar todo el formulario con tu función
+    // 1. Validar formato antes de enviar nada
     const validacion = validarFormularioLogin(formData);
 
     if (!validacion.esValido) {
@@ -54,25 +52,42 @@ const InicioSesion = () => {
       return;
     }
 
-    // 2. Si el formato es válido, simulamos la verificación de credenciales
     setProcesando(true);
     
     try {
-      const resultado = await validarCredenciales(formData.email, formData.password);
+      // 2. PETICIÓN REAL AL BACKEND
+      // Enviamos las credenciales al endpoint que acabas de crear en Java
+      const respuesta = await clienteAxios.post('/auth/login', {
+        email: formData.email,
+        password: formData.password
+      });
+
+      // 3. SI ES EXITOSO (Status 200)
+      const { username, esAdmin, idUsuario } = respuesta.data;
+
+      // Guardamos la sesión en LocalStorage para saber que está logueado
+      localStorage.setItem('usuario', JSON.stringify({ username, esAdmin, idUsuario }));
       
-      if (formData.email === 'admin@gmail.com' && formData.password === 'admin') {
-            navigate('/panel-admin'); 
-        } else {
-            navigate('/'); 
-        }
+      // Feedback visual y redirección
+      // Puedes quitar el alert si prefieres algo más sutil
+      alert(`¡Bienvenido de nuevo, ${username}!`); 
+      navigate('/'); // Redirigir al Home
+
     } catch (error) {
-      setErrorGeneral("Error de conexión. Intente nuevamente.");
+      console.error("Error en login:", error);
+      
+      // 4. MANEJO DE ERRORES REALES
+      if (error.response && error.response.status === 401) {
+        // Backend respondió "Credenciales inválidas"
+        setErrorGeneral("Correo o contraseña incorrectos.");
+      } else {
+        setErrorGeneral("Error de conexión con el servidor. Intenta más tarde.");
+      }
     } finally {
       setProcesando(false);
     }
   };
 
-  // Helper para clases CSS
   const getInputClass = (campo) => {
     return errores[campo] ? 'input-error' : '';
   };
@@ -94,7 +109,6 @@ const InicioSesion = () => {
 
           <form onSubmit={handleSubmit} className="auth-form" noValidate>
             
-            {/* EMAIL */}
             <div className="form-group-neon">
               <label>Correo Electrónico</label>
               <div className="input-wrapper">
@@ -113,7 +127,6 @@ const InicioSesion = () => {
               {errores.email && <span className="error-msg">{errores.email}</span>}
             </div>
 
-            {/* PASSWORD */}
             <div className="form-group-neon">
               <label>Contraseña</label>
               <div className="input-wrapper">

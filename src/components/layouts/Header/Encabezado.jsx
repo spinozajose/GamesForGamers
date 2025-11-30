@@ -1,8 +1,8 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCarrito } from '../../../context/CarritoContext';
 
-// Importamos ambos archivos de estilos
+// Estilos
 import './Encabezado.css';
 import '../../../pages/Checkout/Carrito.css';
 
@@ -10,6 +10,21 @@ function Header() {
   const { carrito, eliminarDelCarrito, actualizarCantidad, totalItems, totalPrecio } = useCarrito();
   const [showCart, setShowCart] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Estado para el usuario logueado
+  const [usuario, setUsuario] = useState(null);
+  const location = useLocation(); // Detecta cambios de ruta (login/logout)
+  const navigate = useNavigate();
+
+  // Verificar sesión cada vez que cambiamos de página
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      setUsuario(JSON.parse(usuarioGuardado));
+    } else {
+      setUsuario(null);
+    }
+  }, [location]);
 
   // Cerrar carrito cuando se hace clic fuera
   useEffect(() => {
@@ -27,6 +42,12 @@ function Header() {
 
   const toggleCart = () => setShowCart(!showCart);
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
+  const handleLogout = () => {
+    localStorage.removeItem('usuario');
+    setUsuario(null);
+    navigate('/');
+  };
 
   const aumentarCantidad = (itemId) => {
     const item = carrito.find(item => item.id === itemId);
@@ -77,13 +98,33 @@ function Header() {
             </button>
 
             <div className="user-actions">
-              <NavLink to="/login" className="user-link" onClick={() => setMobileMenuOpen(false)}>
-                Ingresar
-              </NavLink>
-              <span className="separator">|</span>
-              <NavLink to="/register" className="user-link register" onClick={() => setMobileMenuOpen(false)}>
-                Registrarse
-              </NavLink>
+              {usuario ? (
+                // MENÚ DE USUARIO LOGUEADO
+                <>
+                  <NavLink to="/mis-compras" className="user-link" onClick={() => setMobileMenuOpen(false)}>
+                   Mis Compras
+                  </NavLink>
+                  <span className="separator">|</span>
+                  <button 
+                    onClick={handleLogout} 
+                    className="user-link"
+                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.9rem' }}
+                  >
+                    Salir
+                  </button>
+                </>
+              ) : (
+                // MENÚ DE INVITADO
+                <>
+                  <NavLink to="/login" className="user-link" onClick={() => setMobileMenuOpen(false)}>
+                    Ingresar
+                  </NavLink>
+                  <span className="separator">|</span>
+                  <NavLink to="/register" className="user-link register" onClick={() => setMobileMenuOpen(false)}>
+                    Registrarse
+                  </NavLink>
+                </>
+              )}
             </div>
             
             <button className="menu-toggle" onClick={toggleMobileMenu}>
@@ -156,7 +197,6 @@ function Header() {
             {carrito.length > 0 && (
               <div className="cart-footer">
                 <div className="cart-total">
-                  {/* Separamos el texto del valor para aplicar el estilo justify-between del CSS */}
                   <strong>Total:</strong>
                   <strong>{formatearPrecio(totalPrecio)}</strong>
                 </div>
@@ -172,7 +212,6 @@ function Header() {
             )}
           </div>
           
-          {/* Overlay oscuro de fondo */}
           <div className="cart-overlay" onClick={() => setShowCart(false)}></div>
         </>
       )}
