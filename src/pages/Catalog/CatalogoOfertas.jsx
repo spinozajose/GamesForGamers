@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { useCarrito } from '../../context/CarritoContext';
 import './CatalogoOfertas.css';
+import witcher3 from '../../assets/images/witcher3.jpg';
+import doom from '../../assets/images/doom.jpg';
+import nes from '../../assets/images/nesunbound.jpg';
+import Cyberpunk2077 from '../../assets/images/Cyberpunk-2077.jpg';
+import fc26 from '../../assets/images/fc26.webp';
+import assasinscread from '../../assets/images/Assassins-Creed.webp';
+import hades from '../../assets/images/Hades.webp';
+import re4 from '../../assets/images/re4.jpg';
+
 
 // Mock de datos (Solo juegos con descuento)
 const OFERTAS_MOCK = [
-  { id: 101, name: "Cyberpunk 2077", price: 35000, discount: 50, category: "RPG", image: "https://via.placeholder.com/300x400?text=Cyberpunk+50off" },
-  { id: 102, name: "FIFA 24", price: 60000, discount: 30, category: "Deportes", image: "https://via.placeholder.com/300x400?text=FIFA+Sale" },
-  { id: 103, name: "Assassin's Creed Mirage", price: 45000, discount: 20, category: "Acción", image: "https://via.placeholder.com/300x400?text=AC+Mirage" },
-  { id: 104, name: "Hades", price: 15000, discount: 40, category: "Indie", image: "https://via.placeholder.com/300x400?text=Hades" },
-  { id: 105, name: "Resident Evil 4 Remake", price: 40000, discount: 25, category: "Terror", image: "https://via.placeholder.com/300x400?text=RE4" },
-  { id: 106, name: "Need for Speed Unbound", price: 50000, discount: 60, category: "Carreras", image: "https://via.placeholder.com/300x400?text=NFS" },
-  { id: 107, name: "The Witcher 3", price: 20000, discount: 75, category: "RPG", image: "https://via.placeholder.com/300x400?text=Witcher" },
-  { id: 108, name: "Doom Eternal", price: 25000, discount: 55, category: "Shooter", image: "https://via.placeholder.com/300x400?text=Doom" },
+  { id: 101, name: "Cyberpunk 2077", price: 35000, discount: 50, category: "RPG", image: Cyberpunk2077 },
+  { id: 102, name: "EA FC 26", price: 60000, discount: 30, category: "Deportes", image: fc26 },
+  { id: 103, name: "Assassin's Creed Mirage", price: 45000, discount: 20, category: "Acción", image: assasinscread },
+  { id: 104, name: "Hades", price: 15000, discount: 40, category: "Indie", image: hades },
+  { id: 105, name: "Resident Evil 4 Remake", price: 40000, discount: 25, category: "Terror", image: re4 },
+  { id: 106, name: "Need for Speed Unbound", price: 50000, discount: 60, category: "Carreras", image: nes },
+  { id: 107, name: "The Witcher 3", price: 20000, discount: 75, category: "RPG", image: witcher3 },
+  { id: 108, name: "Doom Eternal", price: 25000, discount: 55, category: "Shooter", image: doom },
 ];
 
 function CatalogoOfertas() {
