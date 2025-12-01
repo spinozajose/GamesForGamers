@@ -303,3 +303,9 @@
         margin-bottom: 2rem;
     }
 }
+
+select option {
+    background-color: #1a1a2e; /* Fondo oscuro igual al de tu web */
+    color: white;              /* Texto blanco */
+    padding: 10px;
+}
