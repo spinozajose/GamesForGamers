@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useCarrito } from '../../context/CarritoContext';
+import { useNavigate } from 'react-router-dom'; // <--- 1. IMPORTAR
 import './CatalogoOfertas.css';
+
+// Importación de imágenes (se mantienen igual)
 import witcher3 from '../../assets/images/witcher3.jpg';
 import doom from '../../assets/images/doom.jpg';
 import nes from '../../assets/images/nesunbound.jpg';
@@ -10,8 +13,6 @@ import assasinscread from '../../assets/images/Assassins-Creed.webp';
 import hades from '../../assets/images/Hades.webp';
 import re4 from '../../assets/images/re4.jpg';
 
-
-// Mock de datos (Solo juegos con descuento)
 const OFERTAS_MOCK = [
   { id: 101, name: "Cyberpunk 2077", price: 35000, discount: 50, category: "RPG", image: Cyberpunk2077 },
   { id: 102, name: "EA FC 26", price: 60000, discount: 30, category: "Deportes", image: fc26 },
@@ -25,10 +26,11 @@ const OFERTAS_MOCK = [
 
 function CatalogoOfertas() {
   const { agregarAlCarrito } = useCarrito();
+  const navigate = useNavigate(); // <--- 2. INICIALIZAR HOOK
+  
   const [busqueda, setBusqueda] = useState("");
-  const [orden, setOrden] = useState("mayor_descuento"); // Por defecto mostrar mejores ofertas primero
+  const [orden, setOrden] = useState("mayor_descuento");
 
-  // Filtrado y Ordenamiento
   const ofertasFiltradas = OFERTAS_MOCK.filter(juego => 
     juego.name.toLowerCase().includes(busqueda.toLowerCase())
   ).sort((a, b) => {
@@ -47,13 +49,11 @@ function CatalogoOfertas() {
     <div className="ofertas-page">
       <div className="ofertas-container">
         
-        {/* Banner Estático de Ofertas */}
         <div className="ofertas-hero">
           <h1 className="ofertas-title">🔥 Oportunidades Flash</h1>
           <p className="ofertas-subtitle">Descuentos por tiempo limitado en títulos seleccionados</p>
         </div>
 
-        {/* Barra de Control */}
         <div className="ofertas-controls">
           <div className="search-box-ofertas">
             <span className="search-icon">🔍</span>
@@ -75,15 +75,19 @@ function CatalogoOfertas() {
           </div>
         </div>
 
-        {/* Grid de Ofertas */}
         <div className="ofertas-grid">
           {ofertasFiltradas.length > 0 ? (
             ofertasFiltradas.map((juego) => {
               const precioFinal = juego.price * (1 - juego.discount / 100);
               
               return (
-                <div key={juego.id} className="offer-card">
-                  {/* Etiqueta de Descuento Prominente */}
+                <div 
+                  key={juego.id} 
+                  className="offer-card"
+                  // 3. EVENTO CLICK EN LA TARJETA COMPLETA
+                  onClick={() => navigate(`/detalle/${juego.id}`)}
+                  style={{ cursor: 'pointer' }} // Para que se vea la manito
+                >
                   <div className="corner-ribbon">-{juego.discount}%</div>
                   
                   <div className="offer-image">
@@ -101,13 +105,18 @@ function CatalogoOfertas() {
                       </div>
                       <button 
                         className="btn-add-offer"
-                        onClick={() => agregarAlCarrito({
-                          id: juego.id,
-                          name: juego.name,
-                          price: precioFinal,
-                          image: juego.image,
-                          cantidad: 1
-                        })}
+                        // 4. STOP PROPAGATION PARA QUE NO REDIRIJA AL AGREGAR
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          agregarAlCarrito({
+                            id: juego.id,
+                            name: juego.name,
+                            price: precioFinal,
+                            image: juego.image,
+                            cantidad: 1,
+                            precioNumerico: precioFinal
+                          });
+                        }}
                       >
                         Comprar
                       </button>

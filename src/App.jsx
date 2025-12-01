@@ -14,6 +14,7 @@ import VerificarCompra from "./pages/Checkout/VerificarCompra";
 import CatalogoPrecompras from "./pages/Catalog/CatalogoPrecompras"; 
 import Catalogo from "./pages/Catalog/Catalogo"; 
 import CatalogoOfertas from "./pages/Catalog/CatalogoOfertas";
+import DetalleJuego from "./pages/GamesDetails/DetalleJuego";
 import MisCompras from "./pages/Profile/MisCompras"; 
 
 // Admin
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/ofertas" element={<CatalogoOfertas />} />
+          <Route path="/detalle/:id" element={<DetalleJuego />} />
           <Route path="/precompras" element={<CatalogoPrecompras />} />
           <Route path="/contact" element={<Contacto />} />
           <Route path="/contacto" element={<Contacto />} />

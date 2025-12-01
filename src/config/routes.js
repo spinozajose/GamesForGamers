@@ -9,6 +9,7 @@ import Contacto from "../pages/Contact/Contacto";
 
 import Catalogo from "../pages/Catalog/Catalogo"; 
 import CatalogoOfertas from "../pages/Catalogo/CatalogoOfertas";
+import DetalleJuego from "../pages/GamesDetails/DetalleJuego";
 
 export const ROUTES = {
   HOME: "/",
@@ -19,6 +20,7 @@ export const ROUTES = {
   CONTACT: "/contacto",
   CATALOG: "/catalogo",
   OFFERS: "/ofertas",
+  DETAIL: "/detalle/:id"
 };
 
 export const ROUTE_COMPONENTS = [
@@ -32,5 +34,6 @@ export const ROUTE_COMPONENTS = [
   { path: ROUTES.REGISTER, element: <Registro /> },
   { path: ROUTES.CONTACT, element: <Contacto /> },
   { path: ROUTES.CATALOG, element: <Catalogo /> },
-  { path: ROUTES.OFFERS, element: <CatalogoOfertas /> }
+  { path: ROUTES.OFFERS, element: <CatalogoOfertas /> },
+  { path: ROUTES.DETAIL, element: <DetalleJuego /> }
 ];
