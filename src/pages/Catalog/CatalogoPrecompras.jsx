@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { useCarrito } from '../../context/CarritoContext'; // Ajusta la ruta a tu context
 import './CatalogoPrecompras.css';
+import gta6 from '../../assets/images/gta6.jpg';
+import monsterhunter from '../../assets/images/monsterhunter.webp';
+import silksong from '../../assets/images/silksong.jpg';
+import dragonage from '../../assets/images/dragonage.jpg';
+import silenthill2 from '../../assets/images/silenthill2.jpg';
+import metalgear from '../../assets/images/metalgear.jpg';
 
 // Mock de datos para Precompras
 const PRECOMPRAS_MOCK = [
-  { id: 201, name: "Grand Theft Auto VI", price: 70000, releaseDate: "2025-10-15", category: "Mundo Abierto", image: "https://via.placeholder.com/300x400?text=GTA+VI" },
-  { id: 202, name: "Monster Hunter Wilds", price: 65000, releaseDate: "2025-02-28", category: "RPG", image: "https://via.placeholder.com/300x400?text=MH+Wilds" },
-  { id: 203, name: "Hollow Knight: Silksong", price: 25000, releaseDate: "2024-12-01", category: "Indie", image: "https://via.placeholder.com/300x400?text=Silksong" },
-  { id: 204, name: "Dragon Age: Dreadwolf", price: 60000, releaseDate: "2024-11-15", category: "RPG", image: "https://via.placeholder.com/300x400?text=Dragon+Age" },
-  { id: 205, name: "Silent Hill 2 Remake", price: 55000, releaseDate: "2024-10-08", category: "Terror", image: "https://via.placeholder.com/300x400?text=Silent+Hill+2" },
-  { id: 206, name: "Metal Gear Solid Delta", price: 60000, releaseDate: "2025-03-10", category: "Acción", image: "https://via.placeholder.com/300x400?text=MGS+Delta" },
+  { id: 201, name: "Grand Theft Auto VI", price: 70000, releaseDate: "2025-10-15", category: "Mundo Abierto", image: gta6 },
+  { id: 202, name: "Monster Hunter Wilds", price: 65000, releaseDate: "2025-02-28", category: "RPG", image: monsterhunter },
+  { id: 203, name: "Hollow Knight: Silksong", price: 25000, releaseDate: "2024-12-01", category: "Indie", image: silksong },
+  { id: 204, name: "Dragon Age: Dreadwolf", price: 60000, releaseDate: "2024-11-15", category: "RPG", image: dragonage },
+  { id: 205, name: "Silent Hill 2 Remake", price: 55000, releaseDate: "2024-10-08", category: "Terror", image: silenthill2 },
+  { id: 206, name: "Metal Gear Solid Delta", price: 60000, releaseDate: "2025-03-10", category: "Acción", image: metalgear },
 ];
 
 function CatalogoPrecompras() {
