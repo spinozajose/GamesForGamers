@@ -1,217 +1,177 @@
-// components/Checkout.test.jsx
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import Checkout from './Checkout';
+import VerificarCompra from './VerificarCompra';
+import clienteAxios from '../../config/axios';
 
-// Mock de useNavigate
-const mockNavigate = vi.fn();
-
-// Mock de react-router-dom
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+// --- 1. MOCK ROBUSTO DE LOCALSTORAGE ---
+const localStorageMock = (() => {
+  let store = {};
   return {
-    ...actual,
-    useNavigate: () => mockNavigate,
+    getItem: vi.fn((key) => store[key] || null),
+    setItem: vi.fn((key, value) => { store[key] = value.toString(); }),
+    removeItem: vi.fn((key) => { delete store[key]; }),
+    clear: vi.fn(() => { store = {}; }),
   };
-});
+})();
 
-// Mock del contexto del carrito
-const mockCarritoContext = {
-  carrito: [
-    {
-      id: '1',
-      name: 'Juego de Prueba',
-      precio: 19990,
-      precioNumerico: 19990,
-      imagen: 'test.jpg',
-      cantidad: 1
-    }
-  ],
-  totalPrecio: 19990,
-  limpiarCarrito: vi.fn(),
-  actualizarCantidad: vi.fn(),
-  eliminarDelCarrito: vi.fn()
-};
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
-vi.mock('../context/CarritoContext', () => ({
-  useCarrito: () => mockCarritoContext,
+// --- 2. MOCKS DE LIBRERÍAS ---
+const mocksValidaciones = vi.hoisted(() => ({
+  mockValidarFormularioCompleto: vi.fn(),
+  mockValidarCampoEnTiempoReal: vi.fn()
 }));
 
-// Mock de validaciones
-vi.mock('../assets/js/ValidacionesCheckout', () => ({
+vi.mock('../../assets/js/ValidacionesCheckout', () => ({
   useValidacionesCheckout: () => ({
-    validarFormularioCompleto: vi.fn(() => ({ esValido: true, errores: {} })),
-    validarCampoEnTiempoReal: vi.fn(() => '')
+    validarCampoEnTiempoReal: mocksValidaciones.mockValidarCampoEnTiempoReal
+  }),
+  validarFormularioCompleto: mocksValidaciones.mockValidarFormularioCompleto
+}));
+
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
+vi.mock('../../config/axios');
+
+// --- 3. MOCK DEL CARRITO ---
+const mockLimpiarCarrito = vi.fn();
+const mockEliminarDelCarrito = vi.fn();
+let mockCarritoState = {
+  carrito: [{ id: 1, name: 'Juego Test', price: 10000, precioNumerico: 10000, cantidad: 1, image: 'img.jpg' }],
+  totalPrecio: 10000,
+  totalItems: 1
+};
+
+vi.mock('../../context/CarritoContext', () => ({
+  useCarrito: () => ({
+    ...mockCarritoState,
+    limpiarCarrito: mockLimpiarCarrito,
+    eliminarDelCarrito: mockEliminarDelCarrito
   }),
 }));
 
-// Mock de CSS
-vi.mock('../assets/css/Checkout.css', () => ({}));
+window.scrollTo = vi.fn();
 
-describe('Checkout - Test Simple', () => {
+describe('Pruebas del Componente VerificarCompra', () => {
+
   beforeEach(() => {
     vi.clearAllMocks();
-    // Configurar localStorage para carrito normal
-    vi.mocked(localStorage.getItem).mockImplementation((key) => {
-      if (key === 'esPrecompra') return 'false';
-      if (key === 'carritoPrecompra') return '[]';
-      return null;
+    localStorage.clear(); // Limpiamos nuestro mock manual
+    
+    // Configuración Base: Usuario logueado
+    localStorage.setItem('usuario', JSON.stringify({ idUsuario: 99, email: 'test@user.com' }));
+    
+    // Reset mocks validación
+    mocksValidaciones.mockValidarFormularioCompleto.mockReturnValue({ esValido: true, errores: {} });
+    mocksValidaciones.mockValidarCampoEnTiempoReal.mockReturnValue('');
+    
+    // Reset carrito
+    mockCarritoState = {
+      carrito: [{ id: 1, name: 'Juego Test', price: 10000, precioNumerico: 10000, cantidad: 1, image: 'img.jpg' }],
+      totalPrecio: 10000,
+      totalItems: 1
+    };
+  });
+
+  const renderComponent = () => {
+    return render(
+      <BrowserRouter>
+        <VerificarCompra />
+      </BrowserRouter>
+    );
+  };
+
+  test('Debe redirigir al Login si no hay usuario en LocalStorage', async () => {
+    localStorage.removeItem('usuario');
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    renderComponent();
+
+    // Esperamos a que el useEffect se ejecute
+    await waitFor(() => {
+      expect(alertMock).toHaveBeenCalledWith("Debes iniciar sesión para completar la compra");
+      expect(mockNavigate).toHaveBeenCalledWith('/login');
     });
   });
 
-  test('renderiza correctamente con productos en el carrito', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
+  test('Debe mostrar mensaje de "Carrito Vacío" si no hay items', () => {
+    mockCarritoState = { carrito: [], totalPrecio: 0, totalItems: 0 };
+    renderComponent();
+    expect(screen.getByText(/Tu carrito está vacío/i)).toBeInTheDocument();
+  });
 
+  test('Debe renderizar el formulario correctamente', () => {
+    renderComponent();
     expect(screen.getByText('Finalizar Compra')).toBeInTheDocument();
-    expect(screen.getByText('Juego de Prueba')).toBeInTheDocument();
-    
-    // Usar getAllByText para manejar múltiples elementos con el mismo texto
-    const precios = screen.getAllByText('$19.990');
-    expect(precios.length).toBeGreaterThan(0);
-    expect(precios[0]).toBeInTheDocument();
   });
 
-  test('muestra carrito vacío cuando no hay productos', () => {
-    // Mock temporal de carrito vacío
-    const originalCarrito = [...mockCarritoContext.carrito];
-    const originalTotal = mockCarritoContext.totalPrecio;
-    
-    mockCarritoContext.carrito = [];
-    mockCarritoContext.totalPrecio = 0;
-
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('🛒 Carrito Vacío')).toBeInTheDocument();
-    expect(screen.getByText('No hay productos en tu carrito')).toBeInTheDocument();
-
-    // Restaurar valores originales
-    mockCarritoContext.carrito = originalCarrito;
-    mockCarritoContext.totalPrecio = originalTotal;
-  });
-
-  test('navega correctamente al hacer clic en volver', async () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    const botonVolver = screen.getByText('← Volver');
-    await act(async () => {
-      fireEvent.click(botonVolver);
+  test('Debe mostrar errores de validación y NO enviar orden si falla', async () => {
+    mocksValidaciones.mockValidarFormularioCompleto.mockReturnValue({
+      esValido: false,
+      errores: { nombre: 'Requerido' }
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith(-1);
+    renderComponent();
+
+    const botonPagar = screen.getByRole('button', { name: /Pagar/i });
+    fireEvent.click(botonPagar);
+
+    expect(screen.getByText('Requerido')).toBeInTheDocument();
+    expect(clienteAxios.post).not.toHaveBeenCalled();
   });
 
-  test('permite llenar campos básicos del formulario usando querySelector', async () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
+  test('Debe procesar la orden EXITOSAMENTE', async () => {
+    // 1. Preparamos el mock de éxito
+    clienteAxios.post.mockResolvedValue({ data: { id: 'ORD-123' } });
 
-    // Usar querySelector para encontrar el input por name attribute
-    const nombreInput = document.querySelector('input[name="nombre"]');
-    expect(nombreInput).toBeInTheDocument();
-    
-    await act(async () => {
-      fireEvent.change(nombreInput, { target: { value: 'Juan Pérez' } });
+    renderComponent();
+
+    // 2. IMPORTANTE: Esperar a que el componente lea el usuario del LocalStorage
+    // Si no esperamos, el state "usuario" es null y falla el "if (!usuario)"
+    await waitFor(() => {
+      // Verificamos que el input de email se haya rellenado con el dato del localStorage
+      // Esto confirma que el useEffect ya corrió
+      expect(screen.getByDisplayValue('test@user.com')).toBeInTheDocument();
     });
 
-    expect(nombreInput.value).toBe('Juan Pérez');
-  });
-
-  test('maneja el formato de RUT correctamente usando querySelector', async () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    // Buscar el input por su name attribute usando querySelector
-    const rutInput = document.querySelector('input[name="rut"]');
-    expect(rutInput).toBeInTheDocument();
-    
+    // 3. Ahora sí clickeamos
+    const botonPagar = screen.getByRole('button', { name: /Pagar/i });
     await act(async () => {
-      fireEvent.change(rutInput, { target: { value: '123456789' } });
+      fireEvent.click(botonPagar);
     });
 
-    // El RUT debería formatearse automáticamente
-    expect(rutInput.value).toBe('12.345.678-9');
+    // 4. Verificamos éxito
+    await waitFor(() => {
+      expect(clienteAxios.post).toHaveBeenCalled();
+      expect(screen.getByText('¡Gracias por tu compra!')).toBeInTheDocument();
+    });
   });
 
-  test('muestra todas las secciones del formulario', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
+  test('Debe manejar ERROR del servidor al procesar la orden', async () => {
+    clienteAxios.post.mockRejectedValue(new Error('Error interno'));
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    expect(screen.getByText('📧 Información de Contacto')).toBeInTheDocument();
-    expect(screen.getByText('🏠 Dirección de Envío')).toBeInTheDocument();
-    expect(screen.getByText('💳 Método de Pago')).toBeInTheDocument();
-  });
+    renderComponent();
 
-  test('muestra opciones de método de pago', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
+    // Esperar carga de usuario
+    await waitFor(() => {
+        expect(screen.getByDisplayValue('test@user.com')).toBeInTheDocument();
+    });
 
-    expect(screen.getByText('💳 Tarjeta de Crédito/Débito')).toBeInTheDocument();
-    expect(screen.getByText('🏦 Transferencia Bancaria')).toBeInTheDocument();
-  });
+    const botonPagar = screen.getByRole('button', { name: /Pagar/i });
+    await act(async () => {
+      fireEvent.click(botonPagar);
+    });
 
-  test('muestra resumen de seguridad', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('🔒 Pago 100% seguro')).toBeInTheDocument();
-    expect(screen.getByText('↩️ Te entregamos tu clave, de inmediato!.')).toBeInTheDocument();
-  });
-
-  test('botón de pagar está presente y muestra el total correcto', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    // Buscar el botón que contiene "Pagar" y "$19.990"
-    const botones = screen.getAllByRole('button');
-    const botonPagar = botones.find(button => 
-      button.textContent.includes('Pagar') && 
-      button.textContent.includes('$19.990')
-    );
-
-    expect(botonPagar).toBeInTheDocument();
-    expect(botonPagar).not.toBeDisabled();
-  });
-
-  test('contiene elementos de resumen del pedido', () => {
-    render(
-      <BrowserRouter>
-        <Checkout />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('Resumen del Pedido')).toBeInTheDocument();
-    expect(screen.getByText('Subtotal:')).toBeInTheDocument();
-    expect(screen.getByText('Envío:')).toBeInTheDocument();
-    expect(screen.getByText('Total:')).toBeInTheDocument();
+    await waitFor(() => {
+      // Usamos stringContaining para ser flexibles con el mensaje exacto
+      expect(alertMock).toHaveBeenCalledWith(expect.stringContaining("error"));
+    });
   });
 });
