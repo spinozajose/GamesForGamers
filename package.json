@@ -16,11 +16,14 @@
     "test:login": "vitest run src/components/Login/Login.test.jsx"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^11.0.0",
     "animate.css": "^4.1.1",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "cmd": "^0.1.0",
+    "dompurify": "^3.3.1",
     "framer-motion": "^12.23.24",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

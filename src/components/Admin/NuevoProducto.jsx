@@ -1,189 +1,150 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
-import './AdminForm.css'; // Usa los estilos nuevos (Glassmorphism)
+import { Link, useNavigate } from 'react-router-dom'; // Agregué useNavigate para redirección más suave
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// IMPORTANTE: Tu configuración de Axios
+import clienteAxios from '../../config/axios'; 
 
-const NuevoProducto = () => {
-  const navigate = useNavigate();
-  const [guardando, setGuardando] = useState(false);
-  
-  // Estado inicial vacío
-  const [form, setForm] = useState({
-    titulo: '',
-    descripcion: '',
-    precio: '',
-    descuento: 0,
-    categoria: '',
-    plataforma: 'PC',
-    imagenUrl: '',
-    stock: 100,
-    creador: '',
-    valoracion: 5.0
-  });
+function NuevoProducto() {
+    const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
+    // 1. Estado del formulario
+    const [producto, setProducto] = useState({
+        titulo: '',
+        creador: '',
+        precio: '',
+        descuento: 0,
+        stock: '',
+        categoria: '',
+        plataforma: 'PC / Steam',
+        imagenUrl: '',
+        descripcion: ''
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setGuardando(true);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setProducto({ ...producto, [name]: value });
+    };
 
-    try {
-      // Petición POST al backend
-      // Asegúrate de que los nombres de campos coincidan con tu Entity Java
-      await clienteAxios.post('/videojuegos', form);
-      
-      alert('¡Juego creado exitosamente!');
-      navigate('/panel-admin/productos');
-    } catch (error) {
-      console.error("Error al crear:", error);
-      alert('Error al guardar el juego. Revisa la consola o los datos enviados.');
-    } finally {
-      setGuardando(false);
-    }
-  };
+    // 2. Envío al Backend
+    const handleGuardar = async (e) => {
+        e.preventDefault();
+        
+        if (!producto.titulo || !producto.precio || !producto.descripcion) {
+            alert("Por favor completa Título, Precio y Descripción.");
+            return;
+        }
 
-  return (
-    <div className="admin-container">
-      <div className="admin-header-actions">
-        <h2>Agregar Nuevo Juego</h2>
-        <button className="btn-back" onClick={() => navigate('/panel-admin/productos')}>
-          ← Volver
-        </button>
-      </div>
+        try {
+            // USAMOS clienteAxios: 
+            // Esto envía a: http://TU_IP/api/videojuegos
+            const response = await clienteAxios.post('/videojuegos', producto);
 
-      <div className="form-wrapper">
-        <form onSubmit={handleSubmit} className="admin-form">
-          
-          <div className="form-row">
-            <div className="form-group">
-              <label>Título del Juego</label>
-              <input 
-                type="text" 
-                name="titulo" 
-                required 
-                value={form.titulo} 
-                onChange={handleChange} 
-                placeholder="Ej: Elden Ring" 
-              />
+            if (response.status === 200 || response.status === 201) {
+                alert("¡Producto creado con éxito!");
+                navigate('/panel-admin/productos'); // Redirección SPA
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error al guardar. Verifica la conexión.");
+        }
+    };
+
+    return (
+        <div className="container-fluid fade-in">
+            {/* ESTILOS (Dark Mode / Neon) */}
+            <style>{`
+                .form-container-card { background: rgba(30, 30, 50, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; }
+                .custom-input, .custom-select { background: rgba(15, 12, 30, 0.8) !important; border: 1px solid rgba(255, 255, 255, 0.1); color: #e0e0e0 !important; padding: 10px 15px; border-radius: 8px; }
+                .custom-input:focus, .custom-select:focus { background: rgba(20, 20, 40, 1) !important; border-color: #00f2ff; outline: none; }
+                .custom-label { color: rgba(255, 255, 255, 0.7); margin-bottom: 8px; font-weight: 600; }
+                .btn-neon-save { background: linear-gradient(45deg, #00f2ff, #0099ff); border: none; color: #000; font-weight: 800; padding: 12px 30px; border-radius: 8px; width: 100%; transition: 0.3s;}
+                .btn-neon-save:hover { box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); transform: scale(1.02); color: white; }
+                .ck-editor__editable { background-color: rgba(15, 12, 30, 0.8) !important; color: #e0e0e0 !important; min-height: 200px; }
+                .ck.ck-editor__main>.ck-editor__editable { background: #1a1a2e !important; color: white !important; }
+                .fade-in { animation: fadeIn 0.5s ease-in-out; }
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            `}</style>
+
+            <div className="dashboard-welcome d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <Link to="/panel-admin/productos" className="text-decoration-none me-3" style={{color: '#00f2ff'}}>
+                        <i className="bi bi-arrow-left-circle"></i>
+                    </Link>
+                    Nuevo Producto
+                </h1>
             </div>
-            <div className="form-group">
-              <label>Desarrollador (Creador)</label>
-              <input 
-                type="text" 
-                name="creador" 
-                required 
-                value={form.creador} 
-                onChange={handleChange} 
-                placeholder="Ej: FromSoftware" 
-              />
-            </div>
-          </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Precio (CLP)</label>
-              <input 
-                type="number" 
-                name="precio" 
-                required 
-                value={form.precio} 
-                onChange={handleChange} 
-                placeholder="45000" 
-              />
+            <div className="form-container-card">
+                <form onSubmit={handleGuardar}>
+                    <div className="row g-4">
+                        <div className="col-md-6">
+                            <label className="custom-label">Título del Juego</label>
+                            <input type="text" className="form-control custom-input" name="titulo" value={producto.titulo} onChange={handleChange} placeholder="Ej: Cyberpunk 2077" required />
+                        </div>
+                        <div className="col-md-6">
+                            <label className="custom-label">Desarrollador</label>
+                            <input type="text" className="form-control custom-input" name="creador" value={producto.creador} onChange={handleChange} placeholder="Ej: CD Projekt Red" />
+                        </div>
+                        <div className="col-md-4">
+                            <label className="custom-label">Precio (CLP)</label>
+                            <input type="number" className="form-control custom-input" name="precio" value={producto.precio} onChange={handleChange} required />
+                        </div>
+                        <div className="col-md-4">
+                            <label className="custom-label">Descuento (%)</label>
+                            <input type="number" className="form-control custom-input" name="descuento" value={producto.descuento} onChange={handleChange} />
+                        </div>
+                        <div className="col-md-4">
+                            <label className="custom-label">Stock</label>
+                            <input type="number" className="form-control custom-input" name="stock" value={producto.stock} onChange={handleChange} required />
+                        </div>
+                        <div className="col-md-6">
+                            <label className="custom-label">Categoría</label>
+                            <select className="form-select custom-select" name="categoria" value={producto.categoria} onChange={handleChange} required>
+                                <option value="" disabled>Seleccionar...</option>
+                                <option value="Aventura">Aventura</option>
+                                <option value="RPG">RPG</option>
+                                <option value="Shooter">Shooter</option>
+                                <option value="Estrategia">Estrategia</option>
+                                <option value="Deportes">Deportes</option>
+                                <option value="Terror">Terror</option>
+                            </select>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="custom-label">Plataforma</label>
+                            <select className="form-select custom-select" name="plataforma" value={producto.plataforma} onChange={handleChange}>
+                                <option value="PC / Steam">PC / Steam</option>
+                                <option value="PlayStation 5">PlayStation 5</option>
+                                <option value="Xbox Series X">Xbox Series X</option>
+                                <option value="Nintendo Switch">Nintendo Switch</option>
+                            </select>
+                        </div>
+                        <div className="col-12">
+                            <label className="custom-label">URL de Imagen</label>
+                            <input type="text" className="form-control custom-input" name="imagenUrl" value={producto.imagenUrl} onChange={handleChange} placeholder="https://..." />
+                        </div>
+                        <div className="col-12">
+                            <label className="custom-label">Descripción Detallada</label>
+                            <CKEditor
+                                editor={ClassicEditor}
+                                data={producto.descripcion}
+                                onChange={(event, editor) => {
+                                    const data = editor.getData();
+                                    setProducto({ ...producto, descripcion: data });
+                                }}
+                                config={{ placeholder: 'Describe la historia, requisitos y detalles del juego...' }}
+                            />
+                        </div>
+                        <div className="col-12 mt-4">
+                            <button type="submit" className="btn-neon-save">
+                                <i className="bi bi-save me-2"></i> Guardar Producto
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div className="form-group">
-              <label>Descuento (%)</label>
-              <input 
-                type="number" 
-                name="descuento" 
-                value={form.descuento} 
-                onChange={handleChange} 
-                placeholder="0" 
-              />
-            </div>
-            <div className="form-group">
-              <label>Stock Inicial</label>
-              <input 
-                type="number" 
-                name="stock" 
-                required 
-                value={form.stock} 
-                onChange={handleChange} 
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Categoría</label>
-              <select name="categoria" value={form.categoria} onChange={handleChange} required>
-                <option value="">Seleccionar...</option>
-                <option value="Acción">Acción</option>
-                <option value="RPG">RPG</option>
-                <option value="Aventura">Aventura</option>
-                <option value="Deportes">Deportes</option>
-                <option value="Shooter">Shooter</option>
-                <option value="Terror">Terror</option>
-                <option value="Indie">Indie</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Plataforma</label>
-              <select name="plataforma" value={form.plataforma} onChange={handleChange}>
-                <option value="PC">PC / Steam</option>
-                <option value="PlayStation">PlayStation</option>
-                <option value="Xbox">Xbox</option>
-                <option value="Nintendo">Nintendo</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>URL de Imagen</label>
-            <input 
-                type="text" 
-                name="imagenUrl" 
-                required 
-                value={form.imagenUrl} 
-                onChange={handleChange} 
-                placeholder="https://ejemplo.com/imagen.jpg" 
-            />
-            {form.imagenUrl && (
-              <div className="img-preview">
-                <img 
-                    src={form.imagenUrl} 
-                    alt="Vista previa" 
-                    onError={(e) => e.target.style.display = 'none'} 
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label>Descripción</label>
-            <textarea 
-                name="descripcion" 
-                rows="4" 
-                required 
-                value={form.descripcion} 
-                onChange={handleChange}
-                placeholder="Escribe una breve reseña del juego..."
-            ></textarea>
-          </div>
-
-          <button type="submit" className="btn-save" disabled={guardando}>
-            {guardando ? 'Guardando...' : 'Crear Producto'}
-          </button>
-
-        </form>
-      </div>
-    </div>
-  );
-};
+        </div>
+    );
+}
 
 export default NuevoProducto;
