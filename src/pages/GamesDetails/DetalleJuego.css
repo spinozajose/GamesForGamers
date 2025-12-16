@@ -340,3 +340,39 @@
   box-shadow: 0 0 15px rgba(0,123,255,0.6);
 }
 .rawg-actions .reddit-link { background: linear-gradient(45deg,#FF5700,#FF4500); }
+
+/* Estilos para el contenido traído de CKEditor */
+.detalle-descripcion.ck-content {
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Recuperar los puntos de las listas y numeración */
+.detalle-descripcion.ck-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.detalle-descripcion.ck-content ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.detalle-descripcion.ck-content p {
+    margin-bottom: 10px;
+}
+
+/* Negritas y títulos dentro de la descripción */
+.detalle-descripcion.ck-content strong {
+    color: #fff; /* O un color neon si prefieres */
+}
+
+.detalle-descripcion.ck-content h3, 
+.detalle-descripcion.ck-content h4 {
+    color: #00f2ff;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}

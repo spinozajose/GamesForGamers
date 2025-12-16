@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // <--- Importamos useParams
+import { useNavigate, useParams } from "react-router-dom";
 import { useCarrito } from "../../context/CarritoContext";
-import clienteAxios from "../../config/axios"; // <--- Importamos axios
+import clienteAxios from "../../config/axios";
+import DOMPurify from 'dompurify'; // <--- 1. IMPORTANTE: Importar el sanitizador
 import "./DetalleJuego.css";
 
 const DetalleJuego = () => {
-  // 1. Obtener el ID de la URL
   const { id } = useParams();
   const navigate = useNavigate();
   const { agregarAlCarrito, estaEnCarrito } = useCarrito();
 
-  // 2. Estado local para el juego individual
   const [juego, setJuego] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -19,12 +18,11 @@ const DetalleJuego = () => {
   const [cantidad, setCantidad] = useState(1);
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
-  // 3. EFECTO: Cargar el juego al entrar a la página
   useEffect(() => {
     const obtenerJuego = async () => {
       try {
         setCargando(true);
-        // Hacemos la petición al backend buscando por ID
+        // Nota: Asegúrate que tu backend devuelva 'description' o 'descripcion' correctamente
         const respuesta = await clienteAxios.get(`/videojuegos/${id}`);
         setJuego(respuesta.data);
         setCargando(false);
@@ -40,7 +38,6 @@ const DetalleJuego = () => {
     }
   }, [id]);
 
-  // Funciones auxiliares
   const formatearPrecio = (precio) => {
     if (precio === undefined || precio === null) return "$0";
     return `$${precio.toLocaleString('es-CL')}`;
@@ -52,13 +49,12 @@ const DetalleJuego = () => {
   const manejarAgregarAlCarrito = () => {
     if (!juego) return;
     
-    // Calculamos el precio final por si tiene descuento
     const descuento = juego.discount || 0;
     const precioFinal = juego.price * (1 - descuento / 100);
 
     agregarAlCarrito({
         ...juego,
-        price: precioFinal // Aseguramos enviar el precio con descuento al carrito
+        price: precioFinal
     }, cantidad);
 
     setMostrarMensaje(true);
@@ -70,7 +66,6 @@ const DetalleJuego = () => {
     navigate("/checkout");
   };
 
-  // 4. Renderizado Condicional (Carga / Error / Datos)
   if (cargando) {
     return (
         <div className="detalle-contenedor" style={{ justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -88,19 +83,19 @@ const DetalleJuego = () => {
     );
   }
 
-  // Verificación segura si está en carrito
   const yaEnCarrito = estaEnCarrito(juego.id);
-
-  // Cálculos de precio para mostrar
   const descuento = juego.discount || 0;
   const precioFinal = juego.price * (1 - descuento / 100);
+
+  // Preparamos la descripción (soporta tanto 'description' como 'descripcion')
+  const descripcionHtml = juego.description || juego.descripcion || "";
 
   return (
     <div className="detalle-contenedor">
 
       {mostrarMensaje && (
         <div className="mensaje-agregado">
-          ¡{juego.name} agregado al carrito con éxito!
+          ¡{juego.name || juego.titulo} agregado al carrito con éxito!
         </div>
       )}
 
@@ -108,12 +103,11 @@ const DetalleJuego = () => {
 
         {/* COLUMNA IZQUIERDA */}
         <div className="orden-detalle-juego">
-          {/* Cambiado onVolver por navigate */}
           <button onClick={() => navigate('/catalogo')} className="boton-volver">← Volver al Catálogo</button>
 
           <div className="imagen-contenedor">
             <img
-              src={juego.image || "https://via.placeholder.com/500x300"}
+              src={juego.image || juego.imagenUrl || "https://via.placeholder.com/500x300"}
               alt={juego.name}
               className="detalle-imagen"
               onError={e => e.target.src = "https://via.placeholder.com/500x300?text=Sin+Imagen"}
@@ -125,41 +119,43 @@ const DetalleJuego = () => {
         {/* COLUMNA DERECHA */}
         <div className="detalle-info">
 
-          <h2 className="detalle-titulo">{juego.name}</h2>
+          <h2 className="detalle-titulo">{juego.name || juego.titulo}</h2>
           
-          {/* Bloque de Precio (Nuevo, para que se vea claro) */}
           <div className="detalle-precio-block">
-             {descuento > 0 && <span className="precio-tachado">{formatearPrecio(juego.price)}</span>}
+             {descuento > 0 && <span className="precio-tachado">{formatearPrecio(juego.price || juego.precio)}</span>}
              <span className="precio-principal">{formatearPrecio(precioFinal)}</span>
           </div>
 
-          {juego.description && (
-            <p className="detalle-descripcion">{juego.description}</p>
+          {/* 2. CAMBIO AQUÍ: Renderizar HTML de CKEditor */}
+          {descripcionHtml && (
+            <div 
+                className="detalle-descripcion ck-content"
+                dangerouslySetInnerHTML={{ 
+                    __html: DOMPurify.sanitize(descripcionHtml) 
+                }}
+            />
           )}
+          {/* ------------------------------------------- */}
 
-          {/* METADATOS */}
           <div className="rawg-details" style={{ marginBottom: "20px" }}>
-            {juego.category && (
+            {(juego.category || juego.categoria) && (
               <div className="metadato-item">
-                <span>Categoría:</span> <strong>{juego.category}</strong>
+                <span>Categoría:</span> <strong>{juego.category || juego.categoria}</strong>
               </div>
             )}
-            {juego.plataformas && (
+            {(juego.plataformas || juego.plataforma) && (
               <div className="metadato-item">
-                <span>Plataformas:</span> <strong>{juego.plataformas}</strong>
+                <span>Plataformas:</span> <strong>{juego.plataformas || juego.plataforma}</strong>
               </div>
             )}
-            {/* Si tu backend envía 'creador' o 'desarrollador', úsalo aquí */}
-            {juego.developer && (
+            {(juego.developer || juego.creador) && (
               <div className="metadato-item">
-                <span>Desarrollador:</span> <strong>{juego.developer}</strong>
+                <span>Desarrollador:</span> <strong>{juego.developer || juego.creador}</strong>
               </div>
             )}
           </div>
 
-          {/* CONTROLES DE COMPRA */}
           <div className="detalle-metadatos">
-
             <div className="selector-cantidad-container">
               <strong>Cantidad:</strong>
               <div className="selector-cantidad">
@@ -177,12 +173,11 @@ const DetalleJuego = () => {
               <button
                 className={`boton-carrito ${yaEnCarrito ? "agregado" : ""}`}
                 onClick={manejarAgregarAlCarrito}
-                disabled={yaEnCarrito} // Opcional: Si quieres permitir agregar más cantidad, quita el disabled
+                disabled={yaEnCarrito}
               >
                 {yaEnCarrito ? "En el carrito" : "Agregar al Carrito"}
               </button>
             </div>
-
           </div>
 
         </div>
